@@ -500,9 +500,7 @@ program aleopad_core_v0_1.aleo {
             ticket_amount: 0u128, 
             claimed_amount: 0u128
         });
-
         assert(asset_amount <= pt.ticket_amount - pt.claimed_amount);
-
         Mapping::set(public_tickets, public_ticket_id, UserPublicTicketAmount { 
             ticket_amount: pt.ticket_amount, 
             claimed_amount: pt.claimed_amount + asset_amount
@@ -511,7 +509,7 @@ program aleopad_core_v0_1.aleo {
 
     // ===================== Cap management ======================
 
-    transition issue_cap_to_user(administration: LaunchAdministartion, to: address, amount: u128) -> TicketAmountCap {
+    transition issue_cap_to_user(administration: LaunchAdministartion, to: address, amount: u128) -> (LaunchAdministartion, TicketAmountCap) {
         let cap: TicketAmountCap = TicketAmountCap {
             owner: to,
             launch_id: administration.launch_id,
@@ -523,18 +521,12 @@ program aleopad_core_v0_1.aleo {
             launch_id: administration.launch_id
         }, administration.cap_commit_rand);
 
-        return cap then finalize(self.caller, to_commit, administration.launch_id);
+        return (administration, cap) then finalize(to_commit, administration.launch_id);
     }
 
-    finalize issue_cap_to_user(sender: address, to_commit: field, launch_id: field) {
-        let li: LaunchpadParams = Mapping::get(launches, launch_id);
-
-        assert_eq(sender, li.admin);
-
+    finalize issue_cap_to_user(to_commit: field, launch_id: field) {
         let is_already_issued: bool = Mapping::get_or_use(issued_caps, to_commit, false);
-
         assert(!is_already_issued);
-
         Mapping::set(issued_caps, to_commit, true);
     }
 }
