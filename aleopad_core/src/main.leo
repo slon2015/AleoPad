@@ -76,16 +76,6 @@ program aleopad_core_v0_1.aleo {
     mapping public_launch_total_amounts: field => u128;
     mapping public_tickets: field => UserPublicTicketAmount;
 
-    // ===================== Utils =======================
-
-    inline get_public_ticket_id(user: address, launch_id: field) -> field {
-        return BHP256::hash_to_field(UserPublicTicketAmountKeyData {user, launch_id});
-    }
-
-    inline get_cap_issue_id(user: address, launch_id: field, rand: scalar) -> field {
-        return BHP256::commit_to_field(CapIssueKey {user, launch_id}, rand);
-    }
-
     // ===================== Ensure ======================
 
     inline ensure_create_launch_params(
@@ -404,7 +394,7 @@ program aleopad_core_v0_1.aleo {
 
         let asset_amount: u128 = (amount_microcredits * launch.credits_ratio_numerator) / launch.credits_ratio_denominator;
 
-        let public_ticket_id: field = get_public_ticket_id(buyer, launch_id);
+        let public_ticket_id: field = BHP256::hash_to_field(UserPublicTicketAmountKeyData {user: buyer, launch_id});
         let old_public_ticket: UserPublicTicketAmount = Mapping::get_or_use(public_tickets, public_ticket_id, UserPublicTicketAmount { 
             ticket_amount: 0u128, 
             claimed_amount: 0u128
@@ -467,7 +457,7 @@ program aleopad_core_v0_1.aleo {
         ensure_public_sell_flag(launch.is_private_sells_enabled);
         ensure_cap_set(launch.is_cap_enabled);
 
-        let public_ticket_id: field = get_public_ticket_id(buyer, launch_id);
+        let public_ticket_id: field = BHP256::hash_to_field(UserPublicTicketAmountKeyData {user: buyer, launch_id});
         let old_public_ticket: UserPublicTicketAmount = Mapping::get_or_use(public_tickets, public_ticket_id, UserPublicTicketAmount { 
             ticket_amount: 0u128, 
             claimed_amount: 0u128
@@ -505,7 +495,7 @@ program aleopad_core_v0_1.aleo {
         let li: LaunchpadParams = Mapping::get(launches, launch_id);
         validate_launch_claim_block(li.claim_start_block_height, li.claim_duration_in_blocks, block.height);
 
-        let public_ticket_id: field = get_public_ticket_id(claimer, launch_id);
+        let public_ticket_id: field = BHP256::hash_to_field(UserPublicTicketAmountKeyData {user: claimer, launch_id});
         let pt: UserPublicTicketAmount = Mapping::get_or_use(public_tickets, public_ticket_id, UserPublicTicketAmount { 
             ticket_amount: 0u128, 
             claimed_amount: 0u128
@@ -528,7 +518,12 @@ program aleopad_core_v0_1.aleo {
             amount_to_buy: amount
         };
 
-        return cap then finalize(self.caller, get_cap_issue_id(to, administration.launch_id, administration.cap_commit_rand), administration.launch_id);
+        let to_commit: field = BHP256::commit_to_field(CapIssueKey {
+            user: to, 
+            launch_id: administration.launch_id
+        }, administration.cap_commit_rand);
+
+        return cap then finalize(self.caller, to_commit, administration.launch_id);
     }
 
     finalize issue_cap_to_user(sender: address, to_commit: field, launch_id: field) {
