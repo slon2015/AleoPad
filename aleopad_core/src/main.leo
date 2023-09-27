@@ -25,7 +25,7 @@ program aleopad_core_v0_1.aleo {
         amount_to_buy: u128
     }
 
-    record LaunchAdministartion {
+    record AleopadLaunchAdministartion {
         owner: address
         launch_id: field,
         cap_commit_rand: scalar
@@ -164,8 +164,8 @@ program aleopad_core_v0_1.aleo {
         public is_public_sells_enabled: bool,
         public is_cap_enabled: bool,
         cap_commit_rand: scalar
-    ) -> LaunchAdministartion {
-        let ownership: LaunchAdministartion = LaunchAdministartion {
+    ) -> AleopadLaunchAdministartion {
+        let ownership: AleopadLaunchAdministartion = AleopadLaunchAdministartion {
             owner: admin,
             launch_id: launch_id,
             cap_commit_rand
@@ -509,7 +509,7 @@ program aleopad_core_v0_1.aleo {
 
     // ===================== Cap management ======================
 
-    transition issue_cap_to_user(administration: LaunchAdministartion, to: address, amount: u128) -> (LaunchAdministartion, TicketAmountCap) {
+    transition issue_cap_to_user(administration: AleopadLaunchAdministartion, to: address, amount: u128) -> (AleopadLaunchAdministartion, TicketAmountCap) {
         let cap: TicketAmountCap = TicketAmountCap {
             owner: to,
             launch_id: administration.launch_id,
