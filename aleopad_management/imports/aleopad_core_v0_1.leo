@@ -39,7 +39,6 @@ program aleopad_core_v0_1.aleo {
         public claim_duration_in_blocks: u32,
         public credits_ratio_numerator: u128,
         public credits_ratio_denominator: u128,
-        public publicity: bool,
         public is_private_sells_enabled: bool,
         public is_public_sells_enabled: bool,
         public is_cap_enabled: bool,
