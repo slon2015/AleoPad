@@ -140,6 +140,14 @@ program aleopad_core_v0_1.aleo {
         assert(is_cap_enabled);
     }
 
+    inline ensure_amount_in_u64_borders(amount: field) {
+        assert(amount > 0field && amount <= 18446744073709551615field);
+    }
+
+    inline ensure_amount_in_u128_borders(amount: field) {
+        assert(amount > 0field && amount <= 340282366920938463463374607431768211455field);
+    }
+
     // ===================== Validate ======================
 
     inline validate_launch_claim_block(claim_start_block_height: u32, claim_duration_in_blocks: u32, current_block: u32) {
@@ -247,7 +255,7 @@ program aleopad_core_v0_1.aleo {
         credits_ratio_denominator: u128,
         admin: address
     ) -> (LaunchTicket, BoughtTicketAmount, credits.leo/credits, credits.leo/credits) {
-        assert(amount_microcredits > 0field && amount_microcredits <= 18446744073709551615field);
+        ensure_amount_in_u64_borders(amount_microcredits);
 
         let asset_amount: u128 = (amount_microcredits as u128 * credits_ratio_numerator) / credits_ratio_denominator;
 
@@ -307,7 +315,7 @@ program aleopad_core_v0_1.aleo {
         credits_ratio_denominator: u128,
         admin: address
     ) -> (LaunchTicket, BoughtTicketAmount, credits.leo/credits, credits.leo/credits, TicketAmountCap) {
-        assert(amount_microcredits > 0field && amount_microcredits <= 18446744073709551615field);
+        ensure_amount_in_u64_borders(amount_microcredits);
 
         let asset_amount: u128 = (amount_microcredits as u128 * credits_ratio_numerator) / credits_ratio_denominator;
 
@@ -366,6 +374,7 @@ program aleopad_core_v0_1.aleo {
         launch_id: field, 
         admin: address
     ) -> (credits.leo/credits) {
+        ensure_amount_in_u128_borders(amount_microcredits);
 
         let to_admin: credits = credits.leo/transfer_public_to_private(
             admin,
@@ -417,6 +426,8 @@ program aleopad_core_v0_1.aleo {
         launch_id: field, 
         admin: address
     ) -> (credits.leo/credits, TicketAmountCap) {
+        ensure_amount_in_u64_borders(amount_microcredits);
+        
         let asset_amount: u128 = (amount_microcredits as u128 * credits_ratio_numerator) / credits_ratio_denominator;
 
         let to_admin: credits = credits.leo/transfer_public_to_private(
