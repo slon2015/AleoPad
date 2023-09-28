@@ -54,21 +54,37 @@ program aleopad_tokens_v0_1.aleo {
     // ========================= token =========================
 
     // Create a new token.
-    transition create_token(public token_id: field, public info: TokenInfo, admin: address) -> AleopadTokenAdministration {
-        assert(info.name > 0field);
+    transition create_token(
+        public token_id: field, 
+        public name: field,
+        public symbol: field,
+        public decimals: u8,
+        admin: address
+    ) -> AleopadTokenAdministration {
+        assert(name > 0field);
 
         let adm: AleopadTokenAdministration = AleopadTokenAdministration {
             owner: admin,
             token: token_id
         };
 
-        return adm then finalize(token_id, info, self.caller);
+        return adm then finalize(token_id, name, symbol, decimals, self.caller);
     }
 
-    finalize create_token(public token_id: field, public info: TokenInfo, public caller: address) {
+    finalize create_token(
+        public token_id: field, 
+        public name: field,
+        public symbol: field,
+        public decimals: u8, 
+        public caller: address
+    ) {
         assert(!tokens.contains(token_id));
 
-        tokens.set(token_id, info);
+        tokens.set(token_id, TokenInfo {
+            name,
+            symbol,
+            decimals
+        });
     }
 
     // Transfer public tokens.

@@ -491,7 +491,7 @@ program aleopad_core_v0_1.aleo {
         return then finalize(self.caller, launch_id, asset_amount);
     }
 
-    finalize validate_public_claim (claimer: address, launch_id: field, asset_amount: u128) {
+    finalize validate_public_claim(claimer: address, launch_id: field, asset_amount: u128) {
         let li: LaunchpadParams = Mapping::get(launches, launch_id);
         validate_launch_claim_block(li.claim_start_block_height, li.claim_duration_in_blocks, block.height);
 
