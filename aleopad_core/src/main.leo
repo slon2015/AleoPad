@@ -241,15 +241,15 @@ program aleopad_core_v0_1.aleo {
 
     transition buy_private_without_cap (
         input: credits.leo/credits,
-        amount_microcredits: u128,
+        amount_microcredits: field,
         launch_id: field,
         credits_ratio_numerator: u128,
         credits_ratio_denominator: u128,
         admin: address
     ) -> (LaunchTicket, BoughtTicketAmount, credits.leo/credits, credits.leo/credits) {
-        assert(amount_microcredits as u64 <= input.microcredits);
+        assert(amount_microcredits > 0field && amount_microcredits <= 18446744073709551615field);
 
-        let asset_amount: u128 = (amount_microcredits * credits_ratio_numerator) / credits_ratio_denominator;
+        let asset_amount: u128 = (amount_microcredits as u128 * credits_ratio_numerator) / credits_ratio_denominator;
 
         let new_ticket: LaunchTicket = LaunchTicket {
             owner: self.caller,
@@ -301,15 +301,15 @@ program aleopad_core_v0_1.aleo {
     transition buy_private_with_cap (
         input: credits.leo/credits,
         cap: TicketAmountCap,
-        amount_microcredits: u128,
+        amount_microcredits: field,
         launch_id: field, 
         credits_ratio_numerator: u128,
         credits_ratio_denominator: u128,
         admin: address
     ) -> (LaunchTicket, BoughtTicketAmount, credits.leo/credits, credits.leo/credits, TicketAmountCap) {
-        assert(amount_microcredits as u64 <= input.microcredits);
+        assert(amount_microcredits > 0field && amount_microcredits <= 18446744073709551615field);
 
-        let asset_amount: u128 = (amount_microcredits * credits_ratio_numerator) / credits_ratio_denominator;
+        let asset_amount: u128 = (amount_microcredits as u128 * credits_ratio_numerator) / credits_ratio_denominator;
 
         let new_ticket: LaunchTicket = LaunchTicket {
             owner: self.caller,
@@ -362,7 +362,7 @@ program aleopad_core_v0_1.aleo {
     // ===================== Buy public ======================
 
     transition buy_public_without_cap (
-        amount_microcredits: u128,
+        amount_microcredits: field,
         launch_id: field, 
         admin: address
     ) -> (credits.leo/credits) {
@@ -374,7 +374,7 @@ program aleopad_core_v0_1.aleo {
 
         return to_admin then finalize(
             self.caller,
-            amount_microcredits,
+            amount_microcredits as u128,
             launch_id,
             admin
         );
@@ -411,13 +411,13 @@ program aleopad_core_v0_1.aleo {
 
     transition buy_public_with_cap (
         cap: TicketAmountCap,
-        amount_microcredits: u128,
+        amount_microcredits: field,
         credits_ratio_numerator: u128,
         credits_ratio_denominator: u128,
         launch_id: field, 
         admin: address
     ) -> (credits.leo/credits, TicketAmountCap) {
-        let asset_amount: u128 = (amount_microcredits * credits_ratio_numerator) / credits_ratio_denominator;
+        let asset_amount: u128 = (amount_microcredits as u128 * credits_ratio_numerator) / credits_ratio_denominator;
 
         let to_admin: credits = credits.leo/transfer_public_to_private(
             admin,
