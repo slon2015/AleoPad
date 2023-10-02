@@ -27,6 +27,24 @@ program aleopad_tokens_v0_1.aleo {
         return adm;
     }
 
+    transition create_token_with_launch(
+        public token_id: field, 
+        public name: field,
+        public symbol: field,
+        public decimals: u8,
+        public launch: field,
+        admin: address
+    ) -> AleopadTokenAdministration {
+        assert(name > 0field);
+
+        let adm: AleopadTokenAdministration = AleopadTokenAdministration {
+            owner: admin,
+            token: token_id
+        };
+
+        return adm;
+    }
+
     // ========================= admin ==========================
 
     transition enable_launch(adm: AleopadTokenAdministration, launch: field) -> AleopadTokenAdministration {

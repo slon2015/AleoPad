@@ -89,6 +89,49 @@ program aleopad_tokens_v0_1.aleo {
         });
     }
 
+    transition create_token_with_launch(
+        public token_id: field, 
+        public name: field,
+        public symbol: field,
+        public decimals: u8,
+        public launch: field,
+        admin: address
+    ) -> AleopadTokenAdministration {
+        assert(name > 0field);
+
+        let adm: AleopadTokenAdministration = AleopadTokenAdministration {
+            owner: admin,
+            token: token_id
+        };
+
+        return adm then finalize(token_id, launch, name, symbol, decimals, self.caller);
+    }
+
+    finalize create_token_with_launch(
+        public token_id: field,
+        public launch: field,
+        public name: field,
+        public symbol: field,
+        public decimals: u8, 
+        public caller: address
+    ) {
+        assert(!tokens.contains(token_id));
+
+        tokens.set(token_id, TokenInfo {
+            name,
+            symbol,
+            decimals
+        });
+
+        assert(!launches.contains(launch));
+
+        let tlid: field = get_token_launch_id(token_id, launch);
+
+        token_launches.set(tlid, true);
+        launches.set(launch, true);
+        launch_tokens.set(launch, token_id);
+    }
+
     // Transfer public tokens.
     transition transfer_public(public token_id: field, public to: address, public amount: u128) {
         return then finalize(token_id, self.caller, to, amount);

@@ -46,20 +46,16 @@ program aleopad_management_v0_1.aleo {
             cap_commit_rand
         );
 
-        let token: AleopadTokenAdministration = aleopad_tokens_v0_1.leo/create_token(
+        let token: AleopadTokenAdministration = aleopad_tokens_v0_1.leo/create_token_with_launch(
             token_params.token_id, 
             token_params.name,
             token_params.symbol,
             token_params.decimals,
+            launch_params.launch_id,
             token_admin
         );
 
-        let tokenWithEnabledLaunch: AleopadTokenAdministration = aleopad_tokens_v0_1.leo/enable_launch(
-            token,
-            launch_params.launch_id
-        );
-
-        return (tokenWithEnabledLaunch, launch);
+        return (token, launch);
     }
 
     transition set_up_new_custom_token(
