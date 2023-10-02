@@ -30,7 +30,7 @@ program aleopad_management_v0_1.aleo {
         cap_commit_rand: scalar,
         public token_params: PublicTokenParams,
         token_admin: address
-    ) -> (AleopadTokenAdministration, AleopadLaunchAdministartion) {
+    ) -> (aleopad_tokens_v0_1.leo/AleopadTokenAdministration, aleopad_core_v0_1.leo/AleopadLaunchAdministartion) {
         let launch: AleopadLaunchAdministartion = aleopad_core_v0_1.leo/create_launch(
             launch_params.launch_id,
             launch_params.launch_admin,
@@ -61,7 +61,7 @@ program aleopad_management_v0_1.aleo {
     transition set_up_new_custom_token(
         public launch_params: PublicLaunchParams,
         cap_commit_rand: scalar
-    ) -> (AleopadLaunchAdministartion) {
+    ) -> (aleopad_core_v0_1.leo/AleopadLaunchAdministartion) {
         let launch: AleopadLaunchAdministartion = aleopad_core_v0_1.leo/create_launch(
             launch_params.launch_id,
             launch_params.launch_admin,
