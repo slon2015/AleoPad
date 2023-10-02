@@ -11,6 +11,8 @@ program aleopad_tokens_v0_1.aleo {
     mapping token_launches: field => bool;
     // launch_id => is_already_enabled
     mapping launches: field => bool;
+    // launch_id => token_id
+    mapping launch_tokens: field => field;
 
     record PrivateToken {
         // The token owner
@@ -227,6 +229,7 @@ program aleopad_tokens_v0_1.aleo {
 
         token_launches.set(tlid, true);
         launches.set(launch, true);
+        launch_tokens.set(launch, token);
     }
 
     // ========================= claim =========================
