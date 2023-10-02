@@ -1,13 +1,9 @@
 # aleopad_core.aleo
 
-## Build Guide
+Leo program is responsible for campaign setup and ticket sales
 
-To compile this Aleo program, run:
-```bash
-snarkvm build
-```
+Camapign have settings:
 
-To execute this Aleo program, run:
-```bash
-snarkvm run hello
-```
+- privacy (private, public, mixed)
+- accessibility (accessible for all, accessible for whitelisted addresses)
+- max ticket cap (with cap, without cap)

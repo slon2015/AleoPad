@@ -1,13 +1,8 @@
 # aleopad_tokens.aleo
 
-## Build Guide
+Program for launched tokens management. It contains transitions for exchanging tickets to tokens.
 
-To compile this Aleo program, run:
-```bash
-snarkvm build
-```
+Token claims could be performed in two ways:
 
-To execute this Aleo program, run:
-```bash
-snarkvm run hello
-```
+- Privatly. The ticket record will be exchanged for the token record
+- Publicly. Public ticket mapping record will be exchanged for public token balance
