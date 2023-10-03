@@ -2,7 +2,7 @@
   "name": "aleopad-ui",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://slon2015.github.io/aleopad",
+  "homepage": "https://slon2015.github.io/AleoPad/",
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
     "@demox-labs/aleo-wallet-adapter-base": "^0.0.18",
