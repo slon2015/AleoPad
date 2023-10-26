@@ -55,7 +55,11 @@ program aleopad_management_v0_1.aleo {
             token_admin
         );
 
-        return (token, launch);
+        return (token, launch) then finalize();
+    }
+
+    finalize set_up_new_regular_token() {
+        assert(true);
     }
 
     transition set_up_new_custom_token(
@@ -77,6 +81,10 @@ program aleopad_management_v0_1.aleo {
             cap_commit_rand
         );
 
-        return launch;
+        return launch then finalize();
+    }
+
+    finalize set_up_new_custom_token() {
+        assert(true);
     }
 }

@@ -24,7 +24,11 @@ program aleopad_tokens_v0_1.aleo {
             token: token_id
         };
 
-        return adm;
+        return adm then finalize();
+    }
+
+    finalize create_token() {
+        assert(true);
     }
 
     transition create_token_with_launch(
@@ -42,12 +46,10 @@ program aleopad_tokens_v0_1.aleo {
             token: token_id
         };
 
-        return adm;
+        return adm then finalize();
     }
 
-    // ========================= admin ==========================
-
-    transition enable_launch(adm: AleopadTokenAdministration, launch: field) -> AleopadTokenAdministration {
-        return adm;
+    finalize create_token_with_launch() {
+        assert(true);
     }
 }

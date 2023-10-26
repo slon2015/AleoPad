@@ -50,24 +50,11 @@ program aleopad_core_v0_1.aleo {
             cap_commit_rand
         };
 
-        return ownership;
+        return ownership then finalize();
     }
 
-    // ===================== Cap management ======================
-
-    transition issue_cap_to_user(administration: AleopadLaunchAdministartion, to: address, amount: u128) -> (AleopadLaunchAdministartion, TicketAmountCap) {
-        let cap: TicketAmountCap = TicketAmountCap {
-            owner: to,
-            launch_id: administration.launch_id,
-            amount_to_buy: amount
-        };
-
-        let to_commit: field = BHP256::commit_to_field(CapIssueKey {
-            user: to, 
-            launch_id: administration.launch_id
-        }, administration.cap_commit_rand);
-
-        return (administration, cap);
+    finalize create_launch() {
+        assert(true);
     }
 }
 
