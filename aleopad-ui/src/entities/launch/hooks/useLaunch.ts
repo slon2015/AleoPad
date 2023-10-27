@@ -1,4 +1,4 @@
-import { Launch as DbLaunch, Token as DbToken } from "shared/db";
+import { Launch as DbLaunch, Token as DbToken } from "shared/web3/db";
 import { getLaunchById, useBlockHeight } from "shared/web3";
 import BigNumber from "bignumber.js";
 import { useLaunch as useDbLaunch, useToken } from "shared/hooks";

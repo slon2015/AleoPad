@@ -1,5 +1,5 @@
-import { launches, Launch } from "shared/db";
-import { normalizeFieldId, getLaunchById } from "shared/web3";
+import { launches, Launch } from "shared/web3/db";
+import { normalizeField, getLaunchById } from "shared/web3";
 import { useEffect, useState } from "react";
 
 type LaunchState = {
@@ -9,7 +9,7 @@ type LaunchState = {
 };
 
 export function useLaunch(id: string): LaunchState {
-  const normalizedId = normalizeFieldId(id);
+  const normalizedId = normalizeField(id);
   const [launch, setLaunch] = useState(() =>
     launches.load().find((t) => t.id === normalizedId)
   );
@@ -34,7 +34,7 @@ export function useLaunch(id: string): LaunchState {
             denominator: fetched.denominator.toFixed(),
             flags: fetched.flags,
             tokenId: fetched.tokenId
-              ? normalizeFieldId(fetched.tokenId)
+              ? normalizeField(fetched.tokenId)
               : undefined,
           };
           launches.append(mappedLaunch);

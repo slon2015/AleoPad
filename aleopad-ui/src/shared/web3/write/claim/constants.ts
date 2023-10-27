@@ -1,0 +1,1 @@
+export const CLAIM_TICKET_FEE_AMOUNT = 3_000_000;

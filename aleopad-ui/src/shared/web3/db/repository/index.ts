@@ -1,4 +1,4 @@
-export default class Repository<T extends object> {
+export default class Repository<T extends { id: string }> {
   constructor(public readonly key: string) {}
 
   private getStorageKey() {
@@ -20,5 +20,9 @@ export default class Repository<T extends object> {
   append(...newData: Array<T>) {
     const data = this.load();
     this.save(data.concat(newData));
+  }
+
+  contains(id: string): boolean {
+    return this.load().findIndex((t) => t.id === id) !== -1;
   }
 }

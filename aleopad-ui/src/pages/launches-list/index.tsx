@@ -1,7 +1,15 @@
+import { useWallet } from "@demox-labs/aleo-wallet-adapter-react";
 import { Card, List } from "antd";
 import { LaunchRow } from "entities/launch";
+import { useState } from "react";
+import { BuyModal } from "widgets/buy-modal";
 
-const launches: Array<Parameters<typeof LaunchRow>[0]> = [
+type Launch = Omit<
+  Parameters<typeof LaunchRow>[0],
+  "isConnected" | "onBuyClick"
+>;
+
+const launches: Array<Launch> = [
   {
     launch: {
       id: "1",
@@ -48,14 +56,27 @@ const launches: Array<Parameters<typeof LaunchRow>[0]> = [
 ];
 
 const LaunchesListPage = () => {
+  const [selectedLaunch, setSelectedLaunch] = useState<
+    Launch["launch"] | undefined
+  >();
+
+  const wallet = useWallet();
   return (
     <Card title="Launches">
+      <BuyModal
+        launch={selectedLaunch}
+        onModalClose={() => setSelectedLaunch(undefined)}
+      />
       <List
         bordered
         dataSource={launches}
         renderItem={(l) => (
           <List.Item>
-            <LaunchRow {...l} />
+            <LaunchRow
+              {...l}
+              isConnected={wallet.connected}
+              onBuyClick={() => setSelectedLaunch(l.launch)}
+            />
           </List.Item>
         )}
       />

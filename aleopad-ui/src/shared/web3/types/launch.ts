@@ -1,6 +1,6 @@
 import { Field, U128 } from "../common";
 
-export interface Launch {
+export interface OnchainLaunch {
   id: Field;
   numerator: U128;
   denominator: U128;

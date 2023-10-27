@@ -1,0 +1,1 @@
+export const CREATE_LAUNCH_FEE_AMOUNT = 5_000_000;

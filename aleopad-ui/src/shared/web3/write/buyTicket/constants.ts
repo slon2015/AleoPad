@@ -1,0 +1,1 @@
+export const BUY_TICKET_FEE_AMOUNT = 2_000_000;

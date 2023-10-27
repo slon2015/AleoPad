@@ -1,8 +1,8 @@
-import { tokens } from "shared/db";
-import { fieldToText, normalizeFieldId, getTokenById } from "shared/web3";
+import { tokens } from "shared/web3/db";
+import { fieldToText, normalizeField, getTokenById } from "shared/web3";
 import { useEffect, useState } from "react";
 
-import { Token } from "shared/db";
+import { Token } from "shared/web3/db";
 
 type TokenState = {
   token?: Token;
@@ -11,7 +11,7 @@ type TokenState = {
 };
 
 export function useToken(id?: string): TokenState {
-  const normalizedId = id ? normalizeFieldId(id) : undefined;
+  const normalizedId = id ? normalizeField(id) : undefined;
   const [token, setToken] = useState(() =>
     normalizedId ? tokens.load().find((t) => t.id === normalizedId) : undefined
   );
@@ -31,7 +31,7 @@ export function useToken(id?: string): TokenState {
       getTokenById(normalizedId)
         .then((fetched) => {
           const mappedToken = {
-            id: normalizeFieldId(fetched.id),
+            id: normalizeField(fetched.id),
             decimals: fetched.decimals,
             name: fieldToText(fetched.name),
             symbol: fieldToText(fetched.symbol),

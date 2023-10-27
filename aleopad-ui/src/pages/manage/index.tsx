@@ -1,4 +1,4 @@
-import LaunchEditor from "widgets/launch-editor";
+import LaunchEditor from "features/launch-editor";
 
 const ManagePage = () => {
   return (

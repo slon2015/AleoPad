@@ -1,11 +1,11 @@
-import { Token } from "../types";
+import { OnchainToken } from "../types";
 import {
   Field,
-  getPropgramMapping,
-  normalizeFieldId,
+  normalizeField,
   parseLeoStruct,
   parsePrimitiveType,
 } from "../common";
+import { getPropgramMapping } from "./readMapping";
 
 interface TokenInfo {
   name: Field;
@@ -13,8 +13,8 @@ interface TokenInfo {
   decimals: number;
 }
 
-export async function getTokenById(id: string): Promise<Token> {
-  const normalizedId = normalizeFieldId(id);
+export async function getTokenById(id: string): Promise<OnchainToken> {
+  const normalizedId = normalizeField(id);
 
   const tokenInfoResponse = await getPropgramMapping(
     process.env.REACT_APP_TOKENS_PROGRAMM_ID!!,

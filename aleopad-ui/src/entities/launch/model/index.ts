@@ -1,4 +1,4 @@
-import { Launch as DbLaunch, Token } from "shared/db";
+import { Launch as DbLaunch, Token } from "shared/web3";
 
 export type Launch = Omit<
   DbLaunch,

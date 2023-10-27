@@ -7,7 +7,7 @@ const launches: Array<Parameters<typeof TokenRow>[0]> = [
       id: "1",
       name: "AleoPad token",
       symbol: "ALPDT",
-      decimals: 6,
+      decimals: 8,
     },
   },
   {

@@ -1,6 +1,6 @@
 import BigNumber from "bignumber.js";
 import { useMemo } from "react";
-import { applyDecimals, invertRatio, toRatio } from "./math";
+import { applyBothDecimals, invertRatio, toRatio } from "./math";
 import { Typography } from "antd";
 import { formatNumber } from "./format";
 
@@ -9,6 +9,9 @@ interface RaioProps {
   rightDecimals: number;
   leftSymbol: string;
   leftDecimals: number;
+  notInvertAmounts?: boolean;
+  creditsAmount?: BigNumber.Value;
+  creditsDecimalPlaces?: number;
   ratioData:
     | {
         value: BigNumber.Value;
@@ -27,12 +30,15 @@ export default function Ratio({
   leftDecimals,
   rightSymbol,
   rightDecimals,
+  notInvertAmounts,
+  creditsAmount = 1,
+  creditsDecimalPlaces = 0,
 }: RaioProps) {
   const ratio = useMemo(() => {
     if ("value" in ratioData) {
-      return applyDecimals(ratioData.value, rightDecimals, leftDecimals);
+      return applyBothDecimals(ratioData.value, rightDecimals, leftDecimals);
     } else {
-      return applyDecimals(
+      return applyBothDecimals(
         toRatio(ratioData.numerator, ratioData.denominator),
         rightDecimals,
         leftDecimals
@@ -41,17 +47,22 @@ export default function Ratio({
   }, [ratioData, rightDecimals, leftDecimals]);
 
   const [rightAmount, leftAmount] = useMemo(() => {
-    if (ratio.isLessThanOrEqualTo(LOWER_THRESHOLD)) {
+    if (!notInvertAmounts && ratio.isLessThanOrEqualTo(LOWER_THRESHOLD)) {
       return invertRatio(ratio);
     } else {
       return [BigNumber(1), BigNumber(ratio)];
     }
-  }, [ratio]);
+  }, [ratio, notInvertAmounts]);
 
   return (
     <Typography.Text>
-      {formatNumber(rightAmount, 0)} {rightSymbol.toUpperCase()} ={" "}
-      {formatNumber(leftAmount)} {leftSymbol.toUpperCase()}
+      {formatNumber(
+        rightAmount.multipliedBy(creditsAmount),
+        creditsDecimalPlaces
+      )}{" "}
+      {rightSymbol.toUpperCase()} ={" "}
+      {formatNumber(leftAmount.multipliedBy(creditsAmount))}{" "}
+      {leftSymbol.toUpperCase()}
     </Typography.Text>
   );
 }

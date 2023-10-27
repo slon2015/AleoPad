@@ -1,11 +1,11 @@
-import { Launch } from "../types";
+import { OnchainLaunch } from "../types";
 import {
   Field,
-  getPropgramMapping,
-  normalizeFieldId,
+  normalizeField,
   parseLeoStruct,
   parsePrimitiveType,
 } from "../common";
+import { getPropgramMapping } from "./readMapping";
 import Big from "bignumber.js";
 
 interface LaunchInfo {
@@ -26,8 +26,8 @@ interface LaunchInfo {
   is_cap_enabled: boolean;
 }
 
-export async function getLaunchById(id: string): Promise<Launch> {
-  const normalizedId = normalizeFieldId(id);
+export async function getLaunchById(id: string): Promise<OnchainLaunch> {
+  const normalizedId = normalizeField(id);
 
   const launchParamsResponse = await getPropgramMapping(
     process.env.REACT_APP_CORE_PROGRAMM_ID!!,

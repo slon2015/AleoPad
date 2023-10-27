@@ -8,35 +8,22 @@ import {
   InputNumber,
   Row,
   Select,
+  Typography,
   notification,
 } from "antd";
 import BigNumber from "bignumber.js";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { BlockTiming, Ratio } from "shared/ui";
-import { useMeanBlockTime } from "shared/web3";
-
-interface NewLaunch {
-  token: {
-    name: string;
-    symbol: string;
-    decimals: number;
-  };
-  sellBlockStart: number;
-  sellDurationInBlocks: number;
-  claimBlockStart: number;
-  claimDurationInBlocks: false | number;
-  ratio: BigNumber;
-  flags: {
-    isCapEnabled: boolean;
-    isPublicSellsEnabled: boolean;
-    isPrivateSellsEnabled: boolean;
-  };
-}
+import { useBlockHeight, useMeanBlockTime, useSetUpLaunch } from "shared/web3";
+import { setUpLaunch } from "shared/web3";
 
 function valueToFlags(
   privacy: "mixed" | "public" | "private"
-): Pick<NewLaunch["flags"], "isPrivateSellsEnabled" | "isPublicSellsEnabled"> {
+): Pick<
+  setUpLaunch.NewLaunch["flags"],
+  "isPrivateSellsEnabled" | "isPublicSellsEnabled"
+> {
   if (privacy === "mixed") {
     return {
       isPrivateSellsEnabled: true,
@@ -57,7 +44,7 @@ function valueToFlags(
 
 function flagsToValue(
   flags: Pick<
-    NewLaunch["flags"],
+    setUpLaunch.NewLaunch["flags"],
     "isPrivateSellsEnabled" | "isPublicSellsEnabled"
   >
 ): "mixed" | "public" | "private" {
@@ -70,7 +57,7 @@ function flagsToValue(
   }
 }
 
-const defaultLaunch = (currentBlockNumber: number): NewLaunch => ({
+const defaultLaunch = (currentBlockNumber: number): setUpLaunch.NewLaunch => ({
   token: {
     name: "My new token",
     symbol: "TKN",
@@ -92,28 +79,62 @@ const defaultLaunch = (currentBlockNumber: number): NewLaunch => ({
 const INPUT_SPAN = 6;
 
 export default function LaunchEditor() {
-  const { blockHeight, meanBlockTimeInSeconds, error } = useMeanBlockTime();
+  const heightResponse = useBlockHeight();
+  const blockTimeResponse = useMeanBlockTime();
   const [api, contextHolder] = notification.useNotification();
 
+  const setUp = useSetUpLaunch();
+
   useEffect(() => {
-    if (error) {
+    if (heightResponse.error || blockTimeResponse.error) {
       api.error({
         message: "Block height fetch error",
-        description: error,
+        description: heightResponse.error || blockTimeResponse.error,
       });
     }
-  }, [error]);
+  }, [heightResponse.error, blockTimeResponse.error]);
 
-  const [launch, setLaunch] = useState(defaultLaunch(blockHeight || 1000000));
+  useEffect(() => {
+    if (setUp.enabled && setUp.mutation.isError) {
+      notification.error({
+        message: "Error during launch setup",
+        description: String(setUp.mutation.error),
+      });
+      setUp.mutation.reset();
+    }
+  }, [setUp]);
+
+  const [launch, setLaunch] = useState(defaultLaunch(1000000));
 
   const onCurrentBlockClick = useCallback(() => {
-    if (blockHeight) {
+    if (heightResponse.blockHeight) {
       setLaunch({
         ...launch,
-        sellBlockStart: blockHeight,
+        sellBlockStart: heightResponse.blockHeight,
       });
     }
-  }, [blockHeight, launch]);
+  }, [heightResponse.blockHeight, launch]);
+
+  const [enabled, blocker]: [boolean, string | undefined] = useMemo(() => {
+    if (setUp.enabled) {
+      return [!setUp.mutation.isLoading, setUp.getBlocker(launch)];
+    }
+
+    return [false, undefined];
+  }, [setUp, launch]);
+
+  const onSetUpClick = useCallback(() => {
+    if (setUp.enabled) {
+      if (!blocker) {
+        setUp.mutation.mutate(launch);
+      } else {
+        api.warning({
+          message: "Unable to set up launch",
+          description: blocker,
+        });
+      }
+    }
+  }, [setUp, launch, blocker]);
 
   return (
     <>
@@ -189,14 +210,17 @@ export default function LaunchEditor() {
                 />
               </Col>
               <Col span={12} offset={4}>
-                {blockHeight && meanBlockTimeInSeconds && (
-                  <BlockTiming
-                    currentBlockHeight={blockHeight}
-                    targetBlockHeight={launch.sellBlockStart}
-                    meanBlockTimeInSeconds={meanBlockTimeInSeconds}
-                    dontShowBlocksCount
-                  />
-                )}
+                {heightResponse.blockHeight &&
+                  blockTimeResponse.meanBlockTimeInSeconds && (
+                    <BlockTiming
+                      currentBlockHeight={heightResponse.blockHeight}
+                      targetBlockHeight={launch.sellBlockStart}
+                      meanBlockTimeInSeconds={
+                        blockTimeResponse.meanBlockTimeInSeconds
+                      }
+                      dontShowBlocksCount
+                    />
+                  )}
               </Col>
             </Row>
             <Row style={{ marginTop: "10px" }}>
@@ -226,13 +250,15 @@ export default function LaunchEditor() {
                 />
               </Col>
               <Col offset={4} span={12}>
-                {meanBlockTimeInSeconds && (
+                {blockTimeResponse.meanBlockTimeInSeconds && (
                   <BlockTiming
                     currentBlockHeight={launch.sellBlockStart}
                     targetBlockHeight={
                       launch.sellBlockStart + launch.sellDurationInBlocks
                     }
-                    meanBlockTimeInSeconds={meanBlockTimeInSeconds}
+                    meanBlockTimeInSeconds={
+                      blockTimeResponse.meanBlockTimeInSeconds
+                    }
                     dontShowBlocksCount
                   />
                 )}
@@ -258,14 +284,17 @@ export default function LaunchEditor() {
                 />
               </Col>
               <Col offset={4} span={12}>
-                {blockHeight && meanBlockTimeInSeconds && (
-                  <BlockTiming
-                    currentBlockHeight={blockHeight}
-                    targetBlockHeight={launch.claimBlockStart}
-                    meanBlockTimeInSeconds={meanBlockTimeInSeconds}
-                    dontShowBlocksCount
-                  />
-                )}
+                {heightResponse.blockHeight &&
+                  blockTimeResponse.meanBlockTimeInSeconds && (
+                    <BlockTiming
+                      currentBlockHeight={heightResponse.blockHeight}
+                      targetBlockHeight={launch.claimBlockStart}
+                      meanBlockTimeInSeconds={
+                        blockTimeResponse.meanBlockTimeInSeconds
+                      }
+                      dontShowBlocksCount
+                    />
+                  )}
               </Col>
             </Row>
           </Form.Item>
@@ -288,7 +317,7 @@ export default function LaunchEditor() {
                 />
               </Col>
               <Col offset={4} span={12}>
-                {meanBlockTimeInSeconds &&
+                {blockTimeResponse.meanBlockTimeInSeconds &&
                   launch.claimDurationInBlocks &&
                   launch.claimDurationInBlocks !== 0 && (
                     <BlockTiming
@@ -296,7 +325,9 @@ export default function LaunchEditor() {
                       targetBlockHeight={
                         launch.claimBlockStart + launch.claimDurationInBlocks
                       }
-                      meanBlockTimeInSeconds={meanBlockTimeInSeconds}
+                      meanBlockTimeInSeconds={
+                        blockTimeResponse.meanBlockTimeInSeconds
+                      }
                       dontShowBlocksCount
                     />
                   )}
@@ -372,7 +403,16 @@ export default function LaunchEditor() {
             </Select>
           </Form.Item>
           <Form.Item>
-            <Button type="primary">Setup</Button>
+            <Row justify="center">
+              <Button type="primary" onClick={onSetUpClick} disabled={!enabled}>
+                Setup
+              </Button>
+            </Row>
+            {blocker && (
+              <Row>
+                <Typography.Text type="danger">{blocker}</Typography.Text>
+              </Row>
+            )}
           </Form.Item>
         </Form>
       </Card>

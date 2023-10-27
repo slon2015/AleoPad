@@ -1,4 +1,4 @@
-import { Col, Row, Typography } from "antd";
+import { Button, Col, Row, Typography } from "antd";
 import { useNavigate } from "react-router";
 import { useCallback } from "react";
 
@@ -9,9 +9,15 @@ import { Ratio } from "shared/ui";
 
 type LaunchRowProps = {
   launch: Pick<Launch, "token" | "stage" | "ratio" | "id" | "privacy">;
+  isConnected: boolean;
+  onBuyClick(): void;
 };
 
-export default function LaunchRow({ launch }: LaunchRowProps) {
+export default function LaunchRow({
+  launch,
+  isConnected,
+  onBuyClick,
+}: LaunchRowProps) {
   const launchName = launch?.token?.name || "Token";
   const launchSymbol = launch?.token?.symbol?.toUpperCase() || "TKN";
   const launchDecimals = launch?.token?.decimals || 6;
@@ -23,8 +29,8 @@ export default function LaunchRow({ launch }: LaunchRowProps) {
   }, [launch.id, navigate]);
 
   return (
-    <Row className={styles.row}>
-      <Col span={8}>
+    <Row className={styles.row} align="middle">
+      <Col span={4}>
         <Typography.Link onClick={onLaunchClick}>{launchName}</Typography.Link>
       </Col>
       <Col span={4}>
@@ -41,6 +47,13 @@ export default function LaunchRow({ launch }: LaunchRowProps) {
           leftDecimals={launchDecimals}
           ratioData={{ value: launch.ratio }}
         />
+      </Col>
+      <Col span={4}>
+        {isConnected && launch.stage === "sales" && (
+          <Button type="primary" onClick={onBuyClick}>
+            Buy
+          </Button>
+        )}
       </Col>
     </Row>
   );

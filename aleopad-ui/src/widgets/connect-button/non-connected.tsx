@@ -15,7 +15,7 @@ export function NonConnectedConnectButton({
 }: NonConnectedConnectButtonProps) {
   const onConnectClick = useCallback(() => {
     select(wallets[0].adapter.name);
-    // connect(DecryptPermission.AutoDecrypt, WalletAdapterNetwork.Testnet);
+    // connect(DecryptPermission.UponRequest, WalletAdapterNetwork.Testnet);
   }, [select, wallets]);
 
   return (

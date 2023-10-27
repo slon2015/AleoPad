@@ -1,6 +1,6 @@
 import BigNumber from "bignumber.js";
 
-export function applyDecimals(
+export function applyBothDecimals(
   ratio: BigNumber.Value,
   decimalsRight: number,
   decimalsLeft: number

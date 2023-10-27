@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { getBlockHeight } from "../common";
+import { useQuery } from "react-query";
+import { getBlockHeight } from "../read";
 
 type Response = {
   blockHeight?: number;
@@ -8,34 +8,15 @@ type Response = {
 };
 
 export function useBlockHeight(): Response {
-  const [loading, setLoading] = useState(false);
-  const [blockHeight, setBlockHeight] = useState<number | undefined>(undefined);
-  const [error, setError] = useState<string | undefined>(undefined);
-
-  function readBlockHeight() {
-    setLoading(true);
-    setError(undefined);
-    getBlockHeight()
-      .then((height) => {
-        setBlockHeight(height);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setLoading(false);
-        setError(String(err));
-      });
-  }
-
-  useEffect(() => {
-    readBlockHeight();
-    const interval = setInterval(() => readBlockHeight(), 5000);
-
-    return () => clearInterval(interval);
-  }, []);
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["blockHeight"],
+    queryFn: () => getBlockHeight(),
+    refetchInterval: 5000,
+  });
 
   return {
-    blockHeight,
-    loading,
-    error,
+    blockHeight: data,
+    loading: isLoading,
+    error: isError ? String(error) : undefined,
   };
 }

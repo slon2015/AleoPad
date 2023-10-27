@@ -1,6 +1,6 @@
 import { Field } from "../common";
 
-export interface Token {
+export interface OnchainToken {
   id: Field;
   name: Field;
   symbol: Field;

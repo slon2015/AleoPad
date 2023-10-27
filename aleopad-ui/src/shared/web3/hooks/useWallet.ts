@@ -14,10 +14,11 @@ export const useWallet = (): WalletContextState => {
       disconnect: state.disconnect,
       disconnecting: state.disconnecting,
       publicKey: state.publicKey!!,
-      requestExecution: state.requestExecution,
-      requestRecords: state.requestRecords,
-      requestTransaction: state.requestTransaction,
-      transactionStatus: state.transactionStatus,
+      requestExecution: state.requestExecution!,
+      requestRecords: state.requestRecords!,
+      requestTransaction: state.requestTransaction!,
+      transactionStatus: state.transactionStatus!,
+      wallet: state.wallet!,
     };
 
     return conectedState;

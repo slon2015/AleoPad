@@ -3,18 +3,20 @@ import { TicketRow } from "entities/ticket";
 
 const tickets: Array<Parameters<typeof TicketRow>[0]> = [
   {
-    amount: "10000",
+    amount: "1e12",
     isClaimable: false,
     launchId: "1",
     tokenName: "AleoPad Token",
     tokenSymbol: "ALPDT",
+    tokenDecimals: 8,
   },
   {
-    amount: "35000",
+    amount: "3.5e10",
     isClaimable: false,
     launchId: "1",
     tokenName: "AleoPad Token",
     tokenSymbol: "ALPDT",
+    tokenDecimals: 8,
   },
   {
     amount: "0",
@@ -22,13 +24,15 @@ const tickets: Array<Parameters<typeof TicketRow>[0]> = [
     launchId: "1",
     tokenName: "AleoPad Token",
     tokenSymbol: "ALPDT",
+    tokenDecimals: 8,
   },
   {
-    amount: "5000",
+    amount: "5e20",
     isClaimable: true,
     launchId: "3",
     tokenName: "Some token 2",
     tokenSymbol: "SMTN2",
+    tokenDecimals: 18,
   },
 ];
 
