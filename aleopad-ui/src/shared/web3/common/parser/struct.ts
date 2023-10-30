@@ -15,16 +15,7 @@ function minifyLeoStructText(leoStructText: string): string {
 }
 
 function getLeoEntriesCount(structText: string) {
-  return Array.from(structText.matchAll(/\:/g)).length;
-}
-
-function cleanEndSymbol(value: string, symbol: string): string {
-  const trimed = value.trim();
-  if (trimed.endsWith(symbol)) {
-    return trimed.substring(0, trimed.length - symbol.length);
-  }
-
-  return trimed;
+  return Array.from(structText.matchAll(/:/g)).length;
 }
 
 function getLeoStructEntry(structText: string): {

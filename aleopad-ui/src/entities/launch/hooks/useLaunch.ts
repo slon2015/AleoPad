@@ -1,19 +1,16 @@
-import { Launch as DbLaunch, Token as DbToken } from "shared/web3/db";
 import {
   OnchainLaunch,
   OnchainToken,
-  fieldToText,
   getLaunchById,
   useBlockHeight,
 } from "shared/web3";
-import BigNumber from "bignumber.js";
 import {
   useLaunch as useOnchainLaunch,
   useToken as useOnchainToken,
 } from "shared/web3";
 
 import { Launch } from "../model";
-import { Token, mapToken } from "entities/token/model";
+import { mapToken } from "entities/token/model";
 
 type LaunchState = {
   launch?: Launch;

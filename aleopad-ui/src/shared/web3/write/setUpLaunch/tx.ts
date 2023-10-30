@@ -1,4 +1,4 @@
-import { PublicLaunchParams, SetUpContext } from "./types";
+import { SetUpContext } from "./types";
 import { ConnectedWalletContextState } from "../../types";
 import { normalizeScalar, normalizeStruct } from "../../common";
 
