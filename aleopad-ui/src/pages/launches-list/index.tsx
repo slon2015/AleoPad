@@ -13,7 +13,8 @@ const launches: Array<Launch> = [
   {
     launch: {
       id: "1",
-      ratio: "1e4",
+      numerator: "1e4",
+      denominator: "1",
       stage: "sales",
       privacy: "mixed",
       token: {
@@ -27,7 +28,8 @@ const launches: Array<Launch> = [
   {
     launch: {
       id: "2",
-      ratio: "15e12",
+      numerator: "15e12",
+      denominator: "1",
       stage: "pending",
       privacy: "private",
       token: {
@@ -42,7 +44,8 @@ const launches: Array<Launch> = [
   {
     launch: {
       id: "3",
-      ratio: "2e6",
+      numerator: "2e6",
+      denominator: "1",
       stage: "claims",
       privacy: "public",
       token: {

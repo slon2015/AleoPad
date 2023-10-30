@@ -8,7 +8,10 @@ import styles from "./style.module.scss";
 import { Ratio } from "shared/ui";
 
 type LaunchRowProps = {
-  launch: Pick<Launch, "token" | "stage" | "ratio" | "id" | "privacy">;
+  launch: Pick<
+    Launch,
+    "token" | "stage" | "numerator" | "denominator" | "id" | "privacy"
+  >;
   isConnected: boolean;
   onBuyClick(): void;
 };
@@ -45,7 +48,10 @@ export default function LaunchRow({
           rightDecimals={6}
           leftSymbol={launchSymbol}
           leftDecimals={launchDecimals}
-          ratioData={{ value: launch.ratio }}
+          ratioData={{
+            numerator: launch.numerator,
+            denominator: launch.denominator,
+          }}
         />
       </Col>
       <Col span={4}>

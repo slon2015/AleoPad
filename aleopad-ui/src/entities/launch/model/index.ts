@@ -1,3 +1,4 @@
+import BigNumber from "bignumber.js";
 import { Launch as DbLaunch, Token } from "shared/web3";
 
 export type Launch = Omit<
@@ -6,7 +7,8 @@ export type Launch = Omit<
 > & {
   privacy: "private" | "public" | "mixed";
   cap: boolean;
-  ratio: string;
+  numerator: BigNumber.Value;
+  denominator: BigNumber.Value;
   token?: Token;
   stage: "pending" | "sales" | "await TGE" | "claims" | "finished";
 };

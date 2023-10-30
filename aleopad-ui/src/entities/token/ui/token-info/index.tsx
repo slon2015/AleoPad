@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import {
   Descriptions,
   DescriptionsProps,
@@ -7,14 +7,16 @@ import {
   Skeleton,
 } from "antd";
 
-import { useToken } from "shared/hooks";
+import { useToken } from "shared/web3";
+import { mapToken } from "entities/token/model";
 
 type TokenCardProps = {
   tokenId: string;
 };
 
 export default function TokenInfo({ tokenId }: TokenCardProps) {
-  const { token, error } = useToken(tokenId);
+  const { data: token, error } = useToken(tokenId);
+  const parsedToken = useMemo(() => mapToken(token), [token]);
   const [api, contextHolder] = notification.useNotification();
 
   const items: DescriptionsProps["items"] = [
@@ -22,7 +24,7 @@ export default function TokenInfo({ tokenId }: TokenCardProps) {
       key: "1",
       label: "Name",
       children: token ? (
-        <Typography.Text>{token.name}</Typography.Text>
+        <Typography.Text>{parsedToken!.name}</Typography.Text>
       ) : (
         <Skeleton.Input />
       ),
@@ -31,7 +33,7 @@ export default function TokenInfo({ tokenId }: TokenCardProps) {
       key: "2",
       label: "Symbol",
       children: token ? (
-        <Typography.Text>{token.symbol.toUpperCase()}</Typography.Text>
+        <Typography.Text>{parsedToken!.symbol.toUpperCase()}</Typography.Text>
       ) : (
         <Skeleton.Input />
       ),
@@ -40,7 +42,7 @@ export default function TokenInfo({ tokenId }: TokenCardProps) {
       key: "3",
       label: "Decimals",
       children: token ? (
-        <Typography.Text>{token.decimals}</Typography.Text>
+        <Typography.Text>{parsedToken!.decimals}</Typography.Text>
       ) : (
         <Skeleton.Input />
       ),
@@ -51,7 +53,7 @@ export default function TokenInfo({ tokenId }: TokenCardProps) {
     if (error) {
       api.error({
         message: "Token loading error",
-        description: error,
+        description: String(error),
       });
     }
   }, [error]);

@@ -2,7 +2,7 @@ import { Field } from "./types";
 import { Buffer } from "buffer";
 
 export function fieldToText(field: Field): string {
-  return Buffer.from(field.toString(16)).toString("utf-8");
+  return Buffer.from(field.toString(16), "hex").toString("utf-8");
 }
 
 export function textToField(text: string): Field {

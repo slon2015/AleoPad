@@ -7,10 +7,12 @@ import { Ratio } from "shared/ui";
 type LaunchCardProps = Partial<Launch>;
 
 export default function LaunchInfo(props: LaunchCardProps) {
-  const { cap, privacy, ratio, stage, token } = props;
+  const { cap, privacy, denominator, numerator, stage, token } = props;
 
   const tokenSymbol = token ? token.symbol : "COIN";
   const tokenDecimals = token ? token.decimals : 6;
+
+  debugger;
 
   const items: DescriptionsProps["items"] = [
     {
@@ -25,28 +27,30 @@ export default function LaunchInfo(props: LaunchCardProps) {
     {
       key: "2",
       label: "Cap",
-      children: cap ? (
-        <Typography.Text>{cap ? "enabled" : "disabled"}</Typography.Text>
-      ) : (
-        <Skeleton.Input />
-      ),
+      children:
+        cap != undefined ? (
+          <Typography.Text>{cap ? "enabled" : "disabled"}</Typography.Text>
+        ) : (
+          <Skeleton.Input />
+        ),
     },
     {
       key: "3",
       label: "Ratio",
-      children: ratio ? (
-        <Typography.Text>
-          <Ratio
-            rightSymbol="ALEO"
-            rightDecimals={6}
-            leftSymbol={tokenSymbol}
-            leftDecimals={tokenDecimals}
-            ratioData={{ value: ratio }}
-          />
-        </Typography.Text>
-      ) : (
-        <Skeleton.Input />
-      ),
+      children:
+        numerator && denominator ? (
+          <Typography.Text>
+            <Ratio
+              rightSymbol="ALEO"
+              rightDecimals={6}
+              leftSymbol={tokenSymbol}
+              leftDecimals={tokenDecimals}
+              ratioData={{ numerator, denominator }}
+            />
+          </Typography.Text>
+        ) : (
+          <Skeleton.Input />
+        ),
     },
     {
       key: "4",

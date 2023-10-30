@@ -6,7 +6,8 @@ import BuyForm from "features/buy-form";
 interface BuyModalProps {
   launch?: {
     id: string;
-    ratio: BigNumber.Value;
+    numerator: BigNumber.Value;
+    denominator: BigNumber.Value;
     privacy: "private" | "public" | "mixed";
     token?: {
       id: string;

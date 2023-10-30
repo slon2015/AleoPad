@@ -5,17 +5,26 @@ function isLeoStructTextValid(structText: string): boolean {
 }
 
 function minifyLeoStructText(leoStructText: string): string {
-  const textWithoutQuotes = leoStructText.substring(
-    1,
-    leoStructText.length - 1
-  );
+  const textWithoutQuotes =
+    leoStructText.startsWith('"') && leoStructText.endsWith('"')
+      ? leoStructText.substring(1, leoStructText.length - 1)
+      : leoStructText;
   const textWithoutNewLines = textWithoutQuotes.replaceAll("\n", "");
   const textWithoutWhitespaces = textWithoutNewLines.replaceAll(" ", "");
   return textWithoutWhitespaces;
 }
 
 function getLeoEntriesCount(structText: string) {
-  return Array.from(structText.matchAll(/\:/)).length;
+  return Array.from(structText.matchAll(/\:/g)).length;
+}
+
+function cleanEndSymbol(value: string, symbol: string): string {
+  const trimed = value.trim();
+  if (trimed.endsWith(symbol)) {
+    return trimed.substring(0, trimed.length - symbol.length);
+  }
+
+  return trimed;
 }
 
 function getLeoStructEntry(structText: string): {
@@ -30,8 +39,11 @@ function getLeoStructEntry(structText: string): {
   let key = "";
   let symbol = "";
   let index = 0;
-  for (; symbol !== ":"; index++) {
+  for (; ; index++) {
     symbol = structText[index];
+    if (symbol === ":") {
+      break;
+    }
     key += symbol;
   }
 
@@ -62,8 +74,11 @@ function getLeoStructEntry(structText: string): {
     };
   } else {
     let value = "";
-    for (; symbol !== "," && symbol != "}"; index++) {
+    for (; ; index++) {
       symbol = structText[index];
+      if (symbol === "," || symbol === "}") {
+        break;
+      }
       value += symbol;
     }
 

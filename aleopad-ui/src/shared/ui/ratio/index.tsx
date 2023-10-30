@@ -36,7 +36,11 @@ export default function Ratio({
 }: RaioProps) {
   const ratio = useMemo(() => {
     if ("value" in ratioData) {
-      return applyBothDecimals(ratioData.value, rightDecimals, leftDecimals);
+      return applyBothDecimals(
+        BigNumber(1).dividedBy(ratioData.value),
+        rightDecimals,
+        leftDecimals
+      );
     } else {
       return applyBothDecimals(
         toRatio(ratioData.numerator, ratioData.denominator),

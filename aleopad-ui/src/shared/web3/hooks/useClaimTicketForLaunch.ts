@@ -141,7 +141,7 @@ export function useClaimTicket(launchId: string, tokenId: string): Response {
       loading: false,
       blocker,
       launch: launch.data,
-      token: token.data,
+      token: token.data!,
       enabled,
       mutation,
       selectedTicket,

@@ -1,9 +1,19 @@
 import { Launch as DbLaunch, Token as DbToken } from "shared/web3/db";
-import { getLaunchById, useBlockHeight } from "shared/web3";
+import {
+  OnchainLaunch,
+  OnchainToken,
+  fieldToText,
+  getLaunchById,
+  useBlockHeight,
+} from "shared/web3";
 import BigNumber from "bignumber.js";
-import { useLaunch as useDbLaunch, useToken } from "shared/hooks";
+import {
+  useLaunch as useOnchainLaunch,
+  useToken as useOnchainToken,
+} from "shared/web3";
 
 import { Launch } from "../model";
+import { Token, mapToken } from "entities/token/model";
 
 type LaunchState = {
   launch?: Launch;
@@ -32,7 +42,7 @@ function mapStage(
     sellStartBlock,
     claimStartBlock,
     claimBlockDuration,
-  }: DbLaunch,
+  }: OnchainLaunch,
   blockHeight: number
 ): Launch["stage"] {
   if (blockHeight < sellStartBlock) {
@@ -59,39 +69,40 @@ function mapStage(
 }
 
 function mapLaunch(
-  dbLaunch?: DbLaunch,
+  dbLaunch?: OnchainLaunch,
   blockHeight?: number,
-  token?: DbToken
+  token?: OnchainToken | null
 ): Launch | undefined {
   if (!dbLaunch || !blockHeight) {
     return undefined;
   }
   return {
-    id: dbLaunch.id,
+    id: dbLaunch.id.toFixed(),
     adminAddress: dbLaunch.adminAddress,
     sellStartBlock: dbLaunch.sellStartBlock,
     sellBlockDuration: dbLaunch.sellBlockDuration,
     claimStartBlock: dbLaunch.claimStartBlock,
     claimBlockDuration: dbLaunch.claimBlockDuration,
-    ratio: BigNumber(dbLaunch.numerator).div(dbLaunch.denominator).toFixed(),
+    numerator: dbLaunch.numerator,
+    denominator: dbLaunch.denominator,
     privacy: mapPrivacy(dbLaunch.flags),
     cap: dbLaunch.flags.isCapEnabled,
-    token,
+    token: mapToken(token),
     stage: mapStage(dbLaunch, blockHeight),
   };
 }
 
 export function useLaunch(id: string): LaunchState {
   const {
-    launch,
-    loading: launchLoading,
+    data: launch,
+    isLoading: launchLoading,
     error: launchError,
-  } = useDbLaunch(id);
+  } = useOnchainLaunch(id);
   const {
-    token,
-    loading: tokenLoading,
+    data: token,
+    isLoading: tokenLoading,
     error: tokenError,
-  } = useToken(launch?.tokenId);
+  } = useOnchainToken(launch?.tokenId?.toFixed());
   const {
     blockHeight,
     loading: heightLoading,
@@ -102,6 +113,8 @@ export function useLaunch(id: string): LaunchState {
     launch: mapLaunch(launch, blockHeight, token),
     blockHeight,
     loading: launchLoading || tokenLoading || heightLoading,
-    error: launchError || tokenError || heightError || undefined,
+    error: (launchError || tokenError || heightError || undefined) as
+      | string
+      | undefined,
   };
 }
