@@ -1,11 +1,15 @@
-import { SetUpContext } from "./types";
+import { PublicLaunchParams, SetUpContext } from "./types";
 import { ConnectedWalletContextState } from "../../types";
-import { normalizeScalar } from "../../common";
+import { normalizeScalar, normalizeStruct } from "../../common";
 
 import {
   Transaction,
   WalletAdapterNetwork,
 } from "@demox-labs/aleo-wallet-adapter-base";
+import {
+  PUBLIC_LAUNCH_PARAMS_PROPS_ORDER,
+  PUBLIC_TOKEN_PARAMS_PROPS_ORDER,
+} from "./constants";
 
 export function buildTransaction(
   wallet: ConnectedWalletContextState["publicKey"],
@@ -17,9 +21,15 @@ export function buildTransaction(
     process.env.REACT_APP_MANAGEMET_PROGRAMM_ID!,
     "set_up_new_regular_token",
     [
-      context.publicLaunchParams,
+      normalizeStruct(
+        context.publicLaunchParams,
+        PUBLIC_LAUNCH_PARAMS_PROPS_ORDER
+      ),
       normalizeScalar(context.randomCapScalar),
-      context.publicTokenParams,
+      normalizeStruct(
+        context.publicTokenParams,
+        PUBLIC_TOKEN_PARAMS_PROPS_ORDER
+      ),
       context.adminAddress,
     ],
     context.requiredCredits.toNumber()

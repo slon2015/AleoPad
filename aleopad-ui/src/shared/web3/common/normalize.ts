@@ -30,3 +30,11 @@ export function normalizeU8(id: string | number): string {
 export function normalizeScalar(id: string | Scalar): string {
   return normalize(id, "scalar");
 }
+
+export function normalizeStruct(struct: object, order: Array<string>): string {
+  const propsMap = new Map(Object.entries(struct));
+  const content = order.map(
+    (propName) => `${propName.toLowerCase()}: ${String(propsMap.get(propName))}`
+  );
+  return `{${content.join(", ")}}`;
+}

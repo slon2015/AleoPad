@@ -28,9 +28,9 @@ export interface PublicLaunchParams {
   claim_duration_in_blocks: string;
   credits_ratio_numerator: string;
   credits_ratio_denominator: string;
-  is_private_sells_enabled: boolean;
-  is_public_sells_enabled: boolean;
-  is_cap_enabled: boolean;
+  is_private_sells_enabled: string;
+  is_public_sells_enabled: string;
+  is_cap_enabled: string;
 }
 
 export interface PublicTokenParams {
