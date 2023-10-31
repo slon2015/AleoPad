@@ -79,14 +79,14 @@ export function useBuyTickets(launchId: string): BuyTicketMethods {
     Boolean(
       launch.data &&
         launch.data.flags.isPublicSellsEnabled &&
-        amounts &&
+        amounts?.publicAmount &&
         context &&
         wallet.connected
     );
 
   const getPublicBlocker = () => {
     if (checkPublicEnabled()) {
-      return buyTicket.check(context!, amounts?.publicAmount);
+      return buyTicket.check(context!, amounts!.publicAmount);
     }
   };
 
@@ -94,13 +94,10 @@ export function useBuyTickets(launchId: string): BuyTicketMethods {
     async () => {
       if (checkPublicEnabled()) {
         return buyTicket.buy(
-          buyTicket.createPublicContext(
-            launch.data!,
-            context!.amount,
-            cap.data
-          ),
+          context!,
           wallet as ConnectedWalletContextState,
-          launch.data!
+          launch.data!,
+          amounts!.publicAmount
         );
       }
     },
@@ -141,7 +138,7 @@ export function useBuyTickets(launchId: string): BuyTicketMethods {
     }
   );
 
-  if (!launch.data || !cap.data || !amounts) {
+  if (!launch.data || cap.isLoading || !amounts) {
     return {
       loading: true,
     };

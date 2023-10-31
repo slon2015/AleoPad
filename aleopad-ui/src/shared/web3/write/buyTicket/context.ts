@@ -95,7 +95,8 @@ export function checkContext(
 
   if (
     (ctx.type === "public-with-cap" || ctx.type === "public-without-cap") &&
-    (!publicAmount || publicAmount.isLessThan(ctx.requiredCredits))
+    (!publicAmount ||
+      publicAmount.isLessThan(ctx.requiredCredits.plus(ctx.feeCreditsAmount)))
   ) {
     throw new Error(
       `Public credits amount lower than ${divideToDecimals(

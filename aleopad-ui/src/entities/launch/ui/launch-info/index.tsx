@@ -12,8 +12,6 @@ export default function LaunchInfo(props: LaunchCardProps) {
   const tokenSymbol = token ? token.symbol : "COIN";
   const tokenDecimals = token ? token.decimals : 6;
 
-  debugger;
-
   const items: DescriptionsProps["items"] = [
     {
       key: "1",

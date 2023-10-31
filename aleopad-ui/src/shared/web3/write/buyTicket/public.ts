@@ -2,7 +2,7 @@ import BigNumber from "bignumber.js";
 import { BuyPublicWithCapContext, BuyPublicWithoutCapContext } from "./types";
 import { CapResult } from "../../wallet";
 import { BUY_TICKET_FEE_AMOUNT } from "./constants";
-import { U128 } from "shared/web3/common";
+import { U128, U64 } from "shared/web3/common";
 
 export function preparePublicContextWithoutCap(
   expectedAmount: U128,
@@ -10,7 +10,8 @@ export function preparePublicContextWithoutCap(
 ): BuyPublicWithoutCapContext {
   return {
     type: "public-without-cap",
-    requiredCredits: requiredCredits.plus(BUY_TICKET_FEE_AMOUNT),
+    requiredCredits: requiredCredits,
+    feeCreditsAmount: new U64(BUY_TICKET_FEE_AMOUNT),
     amount: expectedAmount,
   };
 }
@@ -22,7 +23,8 @@ export function preparePublicContextWithCap(
 ): BuyPublicWithCapContext {
   return {
     type: "public-with-cap",
-    requiredCredits: requiredCredits.plus(BUY_TICKET_FEE_AMOUNT),
+    requiredCredits: requiredCredits,
+    feeCreditsAmount: new U64(BUY_TICKET_FEE_AMOUNT),
     capRecord: cap && cap.amountToBuy.isGreaterThan(0) ? cap : undefined,
     amount: expectedAmount,
   };

@@ -37,7 +37,7 @@ export function LaunchCard({ launchId }: LaunchCardProps) {
         <Row>
           <LaunchTimings blockHeight={blockHeight} {...launch} />
         </Row>
-        <Row>
+        <Row justify="center">
           {launch && launch.stage === "sales" && wallet.connected && (
             <BuyForm launchId={launchId} privacy={launch.privacy} />
           )}

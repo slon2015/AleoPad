@@ -3,13 +3,15 @@ import { NonValidatedContext } from "./types";
 import { checkContext } from "./context";
 import { buildTransaction } from "./tx";
 import { awaitTx } from "../../common";
+import { CreditAmounts } from "shared/web3/wallet";
 
 export async function buy(
   context: NonValidatedContext,
   wallet: ConnectedWalletContextState,
-  launch: OnchainLaunch
+  launch: OnchainLaunch,
+  amounts?: CreditAmounts["publicAmount"]
 ): Promise<void> {
-  const validated = checkContext(context);
+  const validated = checkContext(context, amounts);
 
   const transaction = buildTransaction(validated, wallet.publicKey, launch);
 

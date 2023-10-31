@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-import { U128, context } from "../../common";
+import { U128, U64, context } from "../../common";
 import { CapResult, CreditsRecord } from "../../wallet";
 
 type BuyCommon = {
@@ -25,7 +25,10 @@ export type BuyPrivateWithCapContext = context.Type<
 >;
 
 export type BuyPublicWithoutCapContext = context.Type<
-  context.Common & BuyCommon,
+  {
+    feeCreditsAmount: U64;
+  } & context.Common &
+    BuyCommon,
   "public-without-cap"
 >;
 
