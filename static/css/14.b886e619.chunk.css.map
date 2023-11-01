@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/14.b886e619.chunk.css","mappings":"AAAA,sBACE,cCDF,oCACE","sources":["shared/ui/block-timing/styles.module.scss","entities/token/ui/token-row/style.module.scss"],"sourcesContent":[".passed {\n  color: #c7e80e;\n}\n",".row {\n  width: 100%;\n}\n"],"names":[],"sourceRoot":""}
