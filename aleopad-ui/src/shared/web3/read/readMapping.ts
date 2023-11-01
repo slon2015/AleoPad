@@ -21,3 +21,34 @@ export async function getPropgramMapping(
 
   return responseText;
 }
+
+type MappingValueList = Record<string, ListValueItem>;
+
+type ListValueItem = {
+  key: string;
+  value: string;
+  value_id: string;
+};
+
+export async function getAllPropgramMappingValues(
+  programId: string,
+  mappingName: string
+): Promise<Array<ListValueItem>> {
+  const outdatedFlagPostfix =
+    "REACT_APP_HARUKA_EXPLORER_OUTDATED_FLAG" in process.env
+      ? "?outdated=1"
+      : "";
+
+  const response = await axios({
+    baseURL: process.env.REACT_APP_HARUKA_EXPLORER_API_URL!,
+    url: `mapping/list_program_mapping_values/${programId}/${mappingName}${outdatedFlagPostfix}`,
+  });
+
+  if (response.status !== 200) {
+    throw new Error(`Haruka explorer response status ${response.status}`);
+  }
+
+  const result: MappingValueList = response.data;
+
+  return Array.from(Object.values(result));
+}

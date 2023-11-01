@@ -3,7 +3,7 @@ import { NonValidatedContext } from "./types";
 import { checkContext } from "./context";
 import { buildTransaction } from "./tx";
 import { awaitTx } from "../../common";
-import { CreditAmounts } from "shared/web3/wallet";
+import { CreditAmounts } from "../../wallet";
 
 export async function buy(
   context: NonValidatedContext,

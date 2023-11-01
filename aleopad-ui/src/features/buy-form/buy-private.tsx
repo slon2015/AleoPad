@@ -32,7 +32,7 @@ export function BuyPrivateForm({
   showTitle,
 }: BuyPrivateFormProps) {
   const maximumAmount = useMemo(
-    () => U64.maximum(...records.map((r) => r.amount)),
+    () => U64.maximum(...records.map((r) => r.amount), 0),
     [records]
   );
 

@@ -1,1 +1,1 @@
-export const BUY_TICKET_FEE_AMOUNT = 700_000;
+export const BUY_TICKET_FEE_AMOUNT = 1_000_000;
