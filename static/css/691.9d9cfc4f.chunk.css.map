@@ -1,1 +1,0 @@
-{"version":3,"file":"static/css/691.9d9cfc4f.chunk.css","mappings":"AAAA,mBACE","sources":["entities/ticket/ui/ticket-row/styles.module.scss"],"sourcesContent":[".row {\n  width: 100%;\n}\n"],"names":[],"sourceRoot":""}
