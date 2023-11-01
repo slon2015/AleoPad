@@ -2,6 +2,7 @@ import { useWallet } from "@demox-labs/aleo-wallet-adapter-react";
 import { Card, Row, Space, Typography, notification } from "antd";
 
 import { useLaunch, LaunchInfo, LaunchTimings } from "entities/launch";
+import { TokenInfo } from "entities/token";
 import BuyForm from "features/buy-form";
 import { GrantCapForm } from "features/grant-cap-form";
 import { useEffect } from "react";
@@ -34,6 +35,11 @@ export function LaunchCard({ launchId }: LaunchCardProps) {
         <Row>
           <LaunchInfo {...launch} />
         </Row>
+        {launch?.token?.id && (
+          <Row justify="center">
+            <TokenInfo tokenId={launch.token.id} />
+          </Row>
+        )}
         {administration.data && launch?.token && launch?.cap && (
           <Row justify="center">
             <Typography.Title level={4}>Grant cap</Typography.Title>

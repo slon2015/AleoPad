@@ -1,5 +1,5 @@
 import { OnchainToken, ParsedLaunch, getLaunchById } from "shared/web3";
-import { Launch } from "./typings";
+import { Launch } from "./types";
 import { mapToken } from "entities/token/model";
 
 export function mapPrivacy(
