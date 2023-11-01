@@ -1,9 +1,14 @@
 import { useQuery } from "react-query";
 import { getLaunchById } from "../read";
+import { Field, normalizeField } from "../common";
 
-export function useLaunch(launchId: string) {
+export function launchQueryKey(id?: string | Field) {
+  return ["launch", id && normalizeField(id)];
+}
+
+export function useLaunch(launchId: string | Field) {
   return useQuery({
-    queryKey: ["launch", launchId],
+    queryKey: launchQueryKey(launchId),
     queryFn: ({ queryKey }) => getLaunchById(queryKey[1] as string),
   });
 }

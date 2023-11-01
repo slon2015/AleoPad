@@ -2,12 +2,13 @@ import { useQuery } from "react-query";
 import { getCapForLaunch } from "../wallet";
 import { useWallet } from "./useWallet";
 import { ConnectedWalletContextState } from "../types";
+import { Field } from "../common";
 
-export function capQueryKey(launchId: string) {
+export function capQueryKey(launchId: string | Field) {
   return ["cap", "for", "launch", launchId];
 }
 
-export function useCapForLaunch(launchId: string) {
+export function useCapForLaunch(launchId: string | Field) {
   const wallet = useWallet();
 
   return useQuery({

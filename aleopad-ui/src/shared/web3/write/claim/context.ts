@@ -1,7 +1,7 @@
 import BigNumber from "bignumber.js";
 
 import { Field, U128 } from "../../common";
-import { OnchainLaunch } from "../../types";
+import { ParsedLaunch } from "../../types";
 import { CreditAmounts, TicketRecord } from "../../wallet";
 
 import {
@@ -13,7 +13,7 @@ import {
 import { CLAIM_TICKET_FEE_AMOUNT } from "./constants";
 
 export function createPublicContext(
-  launch: OnchainLaunch,
+  launch: ParsedLaunch,
   tokenId: Field,
   publicTicketAmount: U128
 ): PublicClaimContext {

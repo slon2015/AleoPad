@@ -1,7 +1,7 @@
 import { Card, List } from "antd";
 import { TokenRow } from "entities/token";
 import { mapToken } from "entities/token/model";
-import { useTokensList } from "shared/web3/hooks/useTokensList";
+import { useTokensList } from "shared/web3";
 
 const TokensListPage = () => {
   const tokens = useTokensList();

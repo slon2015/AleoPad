@@ -1,17 +1,17 @@
 import { useMutation, useQueryClient, UseMutationResult } from "react-query";
 import { useCreditsAmounts } from "./useCreditsAmounts";
 import { useWallet } from "./useWallet";
-import { U128, U64 } from "../common";
+import { Field, U128, U64 } from "../common";
 import { buyTicket } from "../write";
 import { useLaunch } from "./useLaunch";
 import { capQueryKey, useCapForLaunch } from "./useCapForLaunch";
-import { ConnectedWalletContextState, OnchainLaunch } from "../types";
+import { ConnectedWalletContextState, ParsedLaunch } from "../types";
 import { CreditAmounts, CreditsRecord } from "../wallet";
 import { useEffect, useMemo, useState } from "react";
 
 type BuyTicketMethods =
   | {
-      launch: OnchainLaunch;
+      launch: ParsedLaunch;
       amounts: CreditAmounts;
       loading: false;
       readonly selectedPayment?: "public" | CreditsRecord;
@@ -26,7 +26,7 @@ type BuyTicketMethods =
       loading: true;
     };
 
-export function useBuyTickets(launchId: string): BuyTicketMethods {
+export function useBuyTickets(launchId: string | Field): BuyTicketMethods {
   const wallet = useWallet();
 
   const launch = useLaunch(launchId);

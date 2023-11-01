@@ -3,14 +3,14 @@ import {
   WalletAdapterNetwork,
 } from "@demox-labs/aleo-wallet-adapter-base";
 import { ValidatedContext } from "./types";
-import { OnchainLaunch } from "../../types";
+import { ParsedLaunch } from "../../types";
 import { normalizeField, normalizeU128 } from "../../common";
 import { BUY_TICKET_FEE_AMOUNT } from "./constants";
 
 export function buildTransaction(
   ctx: ValidatedContext,
   publicKey: string,
-  launch: OnchainLaunch
+  launch: ParsedLaunch
 ): Transaction {
   switch (ctx.type) {
     case "private-without-cap":

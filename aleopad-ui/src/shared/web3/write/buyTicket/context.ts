@@ -5,7 +5,7 @@ import {
   ValidatedContext,
 } from "./types";
 import { U128, U64, divideToDecimals } from "../../common";
-import { OnchainLaunch } from "../../types";
+import { ParsedLaunch } from "../../types";
 import { CreditAmounts, CapResult, CreditsRecord } from "../../wallet";
 import {
   preparePrivateContextWithCap,
@@ -26,7 +26,7 @@ function calculateAmountToBuy(
 }
 
 export function createPublicContext(
-  launch: OnchainLaunch,
+  launch: ParsedLaunch,
   credits: U64,
   cap?: CapResult
 ): BuyPublicContext {
@@ -44,7 +44,7 @@ export function createPublicContext(
 }
 
 export function createPrivateContext(
-  launch: OnchainLaunch,
+  launch: ParsedLaunch,
   credits: U64,
   record: CreditsRecord,
   allRecords: CreditAmounts["privateRecords"],

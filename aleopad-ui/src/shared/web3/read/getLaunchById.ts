@@ -1,4 +1,4 @@
-import { OnchainLaunch } from "../types";
+import { ParsedLaunch } from "../types";
 import {
   Field,
   normalizeField,
@@ -26,7 +26,7 @@ interface LaunchInfo {
   is_cap_enabled: boolean;
 }
 
-export async function getLaunchById(id: string): Promise<OnchainLaunch> {
+export async function getLaunchById(id: string): Promise<ParsedLaunch> {
   const normalizedId = normalizeField(id);
 
   const launchParamsResponse = await getPropgramMapping(

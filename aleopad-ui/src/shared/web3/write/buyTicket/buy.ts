@@ -1,4 +1,4 @@
-import { ConnectedWalletContextState, OnchainLaunch } from "../../types";
+import { ConnectedWalletContextState, ParsedLaunch } from "../../types";
 import { NonValidatedContext } from "./types";
 import { checkContext } from "./context";
 import { buildTransaction } from "./tx";
@@ -8,7 +8,7 @@ import { CreditAmounts } from "../../wallet";
 export async function buy(
   context: NonValidatedContext,
   wallet: ConnectedWalletContextState,
-  launch: OnchainLaunch,
+  launch: ParsedLaunch,
   amounts?: CreditAmounts["publicAmount"]
 ): Promise<void> {
   const validated = checkContext(context, amounts);

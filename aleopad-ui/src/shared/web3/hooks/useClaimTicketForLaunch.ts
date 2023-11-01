@@ -9,7 +9,7 @@ import { useCreditsAmounts } from "./useCreditsAmounts";
 import { useWallet } from "./useWallet";
 import {
   ConnectedWalletContextState,
-  OnchainLaunch,
+  ParsedLaunch,
   OnchainToken,
 } from "../types";
 import { useToken } from "./useToken";
@@ -18,7 +18,7 @@ type Response =
   | {
       loading: false;
       publicTicketAmount: U128;
-      launch: OnchainLaunch;
+      launch: ParsedLaunch;
       token: OnchainToken;
       records: Array<TicketRecord>;
       selectedTicket: "public" | TicketRecord | undefined;

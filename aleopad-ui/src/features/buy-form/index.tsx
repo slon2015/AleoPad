@@ -1,4 +1,4 @@
-import { useBuyTickets } from "shared/web3";
+import { Field, useBuyTickets } from "shared/web3";
 
 import { BuyPublicForm } from "./buy-public";
 import { BuyPrivateForm } from "./buy-private";
@@ -8,7 +8,7 @@ import BuyMode from "./buy-mode";
 
 interface BuyFormProps {
   privacy: "private" | "public" | "mixed";
-  launchId: string;
+  launchId: string | Field;
 }
 
 export default function BuyForm({ privacy, launchId }: BuyFormProps) {
