@@ -1,4 +1,4 @@
-import { U128, parsePrimitiveType } from "../common";
+import { U128, normalizeField, parsePrimitiveType } from "../common";
 import {
   ConnectedWalletContextState,
   OnchainCapRecord,
@@ -23,7 +23,7 @@ export async function getCapForLaunch(
     .filter((r) => !r.spent)
     .filter((r) => r.type === "TicketAmountCap")
     .map((r) => r as OnchainCapRecord)
-    .filter((r) => r.data.launch_id === launchId);
+    .filter((r) => r.data.launch_id === normalizeField(launchId));
 
   if (capRecords.length === 1) {
     return {

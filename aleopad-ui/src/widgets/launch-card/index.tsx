@@ -3,7 +3,9 @@ import { Card, Row, Space, Typography, notification } from "antd";
 
 import { useLaunch, LaunchInfo, LaunchTimings } from "entities/launch";
 import BuyForm from "features/buy-form";
+import { GrantCapForm } from "features/grant-cap-form";
 import { useEffect } from "react";
+import { useLaunchAdministartion } from "shared/web3";
 
 interface LaunchCardProps {
   launchId: string;
@@ -11,6 +13,7 @@ interface LaunchCardProps {
 
 export function LaunchCard({ launchId }: LaunchCardProps) {
   const { launch, blockHeight, error: launchError } = useLaunch(launchId);
+  const administration = useLaunchAdministartion(launch?.id);
   const wallet = useWallet();
 
   const [api, contextHolder] = notification.useNotification();
@@ -31,8 +34,17 @@ export function LaunchCard({ launchId }: LaunchCardProps) {
         <Row>
           <LaunchInfo {...launch} />
         </Row>
+        {administration.data && launch?.token && launch?.cap && (
+          <Row justify="center">
+            <Typography.Title level={4}>Grant cap</Typography.Title>
+            <GrantCapForm
+              administration={administration.data}
+              tokenDecimals={launch.token.decimals}
+            />
+          </Row>
+        )}
         <Row justify="center">
-          <Typography.Title>Schedule</Typography.Title>
+          <Typography.Title level={4}>Schedule</Typography.Title>
         </Row>
         <Row>
           <LaunchTimings blockHeight={blockHeight} {...launch} />
