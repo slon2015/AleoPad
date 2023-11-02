@@ -24,7 +24,7 @@ interface RaioProps {
 
 const LOWER_THRESHOLD = 0.0001;
 
-export default function Ratio({
+export function Ratio({
   ratioData,
   leftSymbol,
   leftDecimals,

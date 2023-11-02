@@ -1,4 +1,4 @@
 import BlockTiming from "./block-timing";
-import Ratio from "./ratio";
+import { Ratio, Amount } from "./amounts";
 
-export { BlockTiming, Ratio };
+export { BlockTiming, Ratio, Amount };

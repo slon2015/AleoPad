@@ -5,13 +5,16 @@ import { BuyPrivateForm } from "./buy-private";
 import { Row, Skeleton, Space } from "antd";
 import { useState } from "react";
 import BuyMode from "./buy-mode";
+import { AmountOut } from "./amount-out";
+import { Token } from "entities/token/model";
 
 interface BuyFormProps {
   privacy: "private" | "public" | "mixed";
   launchId: string | Field;
+  token?: Token;
 }
 
-export default function BuyForm({ privacy, launchId }: BuyFormProps) {
+export default function BuyForm({ privacy, launchId, token }: BuyFormProps) {
   const [mode, selectMode] = useState<"public" | "private">("public");
   const buy = useBuyTickets(launchId);
 
@@ -38,6 +41,15 @@ export default function BuyForm({ privacy, launchId }: BuyFormProps) {
         {isBothModesEnabled && (
           <BuyMode selectMode={onModeChange} currentMode={mode} />
         )}
+        <Row justify="center">
+          <AmountOut
+            creditsAmount={buy.creditsAmount}
+            symbol={token?.symbol || "TKN"}
+            decimals={token?.decimals || 6}
+            numerator={buy.launch.numerator}
+            denominator={buy.launch.denominator}
+          />
+        </Row>
         <Row justify="center">
           {mode === "public" ? (
             <BuyPublicForm
