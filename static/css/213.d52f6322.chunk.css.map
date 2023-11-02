@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/213.d52f6322.chunk.css","mappings":"AAAA,kBACE","sources":["entities/token/ui/token-row/style.module.scss"],"sourcesContent":[".row {\n  width: 100%;\n}\n"],"names":[],"sourceRoot":""}
