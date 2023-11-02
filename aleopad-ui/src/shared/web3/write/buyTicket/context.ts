@@ -100,7 +100,7 @@ export function checkContext(
   ) {
     throw new Error(
       `Public credits amount lower than ${divideToDecimals(
-        ctx.requiredCredits,
+        ctx.requiredCredits.plus(ctx.feeCreditsAmount),
         6
       )}`
     );
