@@ -26,7 +26,7 @@ export default function LaunchInfo(props: LaunchCardProps) {
       key: "2",
       label: "Cap",
       children:
-        cap != undefined ? (
+        typeof cap == "boolean" ? (
           <Typography.Text>{cap ? "enabled" : "disabled"}</Typography.Text>
         ) : (
           <Skeleton.Input />

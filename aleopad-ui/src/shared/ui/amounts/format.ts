@@ -12,7 +12,7 @@ export function formatNumber(
   for (let index = 0; index < milestones.length; index++) {
     const milestone = milestones[index];
     if (BigNumber(value).isGreaterThanOrEqualTo(milestone.value)) {
-      if (decimalPlaces == undefined) {
+      if (!decimalPlaces && decimalPlaces !== 0) {
         return (
           BigNumber(value).div(milestone.value).toFixed() + milestone.symbol
         );
@@ -25,7 +25,7 @@ export function formatNumber(
     }
   }
 
-  if (decimalPlaces == undefined) {
+  if (!decimalPlaces && decimalPlaces !== 0) {
     return BigNumber(value).toFixed();
   } else {
     return BigNumber(value).toFixed(decimalPlaces);

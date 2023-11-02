@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { Modal, Row } from "antd";
 import BuyForm from "features/buy-form";
 import { ParsedLaunch } from "shared/web3";

@@ -5,7 +5,7 @@ export function applyBothDecimals(
   decimalsRight: number,
   decimalsLeft: number
 ): BigNumber {
-  if (decimalsRight != decimalsLeft) {
+  if (decimalsRight !== decimalsLeft) {
     return BigNumber(ratio).dividedBy(
       BigNumber(10).pow(Math.abs(decimalsRight - decimalsLeft))
     );

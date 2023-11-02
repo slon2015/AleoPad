@@ -1,6 +1,6 @@
 import React from "react";
 import { Avatar, Button, List, Modal, Row, Space, Typography } from "antd";
-import { NonConnectedWalletContextState, ParsedLaunch } from "shared/web3";
+import { NonConnectedWalletContextState } from "shared/web3";
 import { Wallet } from "@demox-labs/aleo-wallet-adapter-react";
 
 type SelectWalletModalProps = Pick<

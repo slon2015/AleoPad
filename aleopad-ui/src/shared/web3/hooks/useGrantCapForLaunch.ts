@@ -40,7 +40,7 @@ export function useGrantCapForLaunch(
   const enabled = useMemo(
     () =>
       Boolean(administration && wallet.connected && context && credits.amounts),
-    [wallet.connected, context]
+    [wallet.connected, context, administration, credits.amounts]
   );
 
   const blocker = useMemo(() => {

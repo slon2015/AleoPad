@@ -1,6 +1,6 @@
 import { useWallet } from "@demox-labs/aleo-wallet-adapter-react";
 import { Card, List } from "antd";
-import { LaunchRow, mapLaunch } from "entities/launch";
+import { LaunchRow } from "entities/launch";
 import { useState } from "react";
 import { useLaunchesList } from "shared/web3";
 import { BuyModal } from "widgets/buy-modal";
