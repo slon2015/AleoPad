@@ -1,3 +1,4 @@
+import { useWallet } from "@demox-labs/aleo-wallet-adapter-react";
 import { Button, Col, Layout, Row, Space } from "antd";
 import { useNavigate } from "react-router";
 import ConnectButton from "widgets/connect-button";
@@ -6,6 +7,7 @@ const { Header } = Layout;
 
 function AppHeader() {
   const navigate = useNavigate();
+  const wallet = useWallet();
 
   return (
     <Header>
@@ -15,15 +17,19 @@ function AppHeader() {
             <Button type="link" onClick={() => navigate("/")}>
               Launches
             </Button>
-            <Button type="link" onClick={() => navigate("/tickets")}>
-              Tickets
-            </Button>
             <Button type="link" onClick={() => navigate("/tokens")}>
               Tokens
             </Button>
-            <Button type="link" onClick={() => navigate("/manage")}>
-              Create launch
-            </Button>
+            {wallet.connected && (
+              <>
+                <Button type="link" onClick={() => navigate("/tickets")}>
+                  Tickets
+                </Button>
+                <Button type="link" onClick={() => navigate("/manage")}>
+                  Create launch
+                </Button>
+              </>
+            )}
           </Space>
         </Col>
         <Col span={2}>

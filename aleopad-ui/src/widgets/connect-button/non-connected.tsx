@@ -1,6 +1,7 @@
 import { Button } from "antd";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { NonConnectedWalletContextState } from "shared/web3";
+import { SelectWalletModal } from "widgets/select-wallet-modal";
 
 type NonConnectedConnectButtonProps = Pick<
   NonConnectedWalletContextState,
@@ -13,14 +14,24 @@ export function NonConnectedConnectButton({
   select,
   wallets,
 }: NonConnectedConnectButtonProps) {
+  const [isModalOpened, setModalOpened] = useState(false);
+
   const onConnectClick = useCallback(() => {
-    select(wallets[0].adapter.name);
+    setModalOpened(true);
     // connect(DecryptPermission.UponRequest, WalletAdapterNetwork.Testnet);
-  }, [select, wallets]);
+  }, [setModalOpened]);
 
   return (
-    <Button type="primary" disabled={connecting} onClick={onConnectClick}>
-      Connect
-    </Button>
+    <>
+      <Button type="primary" disabled={connecting} onClick={onConnectClick}>
+        Connect
+      </Button>
+      <SelectWalletModal
+        wallets={wallets}
+        select={select}
+        isModalOpen={isModalOpened}
+        onModalClose={() => setModalOpened(false)}
+      />
+    </>
   );
 }
