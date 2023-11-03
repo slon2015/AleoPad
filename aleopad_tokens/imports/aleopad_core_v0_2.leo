@@ -1,6 +1,6 @@
 
-// The 'aleopad_core_v0_1' program.
-program aleopad_core_v0_1.aleo {
+// The 'aleopad_core_v0_2' program.
+program aleopad_core_v0_2.aleo {
 
 
     // ===================== Records ======================
