@@ -1,4 +1,4 @@
-program aleopad_tokens_v0_1.aleo {
+program aleopad_tokens_v0_2.aleo {
 
     record AleopadTokenAdministration {
         // The token owner
