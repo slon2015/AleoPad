@@ -23,7 +23,7 @@ export function checkContext(
   credits: CreditAmounts
 ): GrantCapContext {
   if (
-    ctx.feeCredits.lt(credits.publicAmount) &&
+    ctx.feeCredits.gt(credits.publicAmount) &&
     !credits.privateRecords.find((r) => r.amount.gte(ctx.feeCredits))
   ) {
     throw new Error(`Credits not enought to pay fee`);

@@ -21,7 +21,7 @@ export async function getCapForLaunch(
 
   const capRecords = records
     .filter((r) => !r.spent)
-    .filter((r) => r.type === "TicketAmountCap")
+    .filter((r) => r.recordName === "TicketAmountCap")
     .map((r) => r as OnchainCapRecord)
     .filter((r) => r.data.launch_id === normalizeField(launchId));
 

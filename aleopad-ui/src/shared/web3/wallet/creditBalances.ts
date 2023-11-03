@@ -23,12 +23,14 @@ export async function getCredits(wallet: Arg): Promise<CreditAmounts> {
       wallet.requestRecords("credits.aleo"),
     ]);
 
+  debugger;
+
   return {
     publicAmount: publicBalance
       ? (parsePrimitiveType(publicBalance) as U64)
       : BigNumber(0),
     privateRecords: records
-      .filter((record) => record.type === "credits")
+      .filter((record) => record.recordName === "credits")
       .filter((record) => record.data.microcredits !== "0u64.private")
       .filter((record) => !record.spent)
       .map((record) => ({

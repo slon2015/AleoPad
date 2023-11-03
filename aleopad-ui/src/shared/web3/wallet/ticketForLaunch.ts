@@ -45,7 +45,7 @@ export async function getTicketForLaunch({
       ? (parsePrimitiveType(publicTicket) as U128)
       : new U128(0),
     privateTickets: records
-      .filter((r) => r.type === "LaunchTicket")
+      .filter((r) => r.recordName === "LaunchTicket")
       .filter((r) => !r.spent)
       .map((r) => r as OnchainTicketRecord)
       .map((r) => ({

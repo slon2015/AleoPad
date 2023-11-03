@@ -18,7 +18,6 @@ export function NonConnectedConnectButton({
 
   const onConnectClick = useCallback(() => {
     setModalOpened(true);
-    // connect(DecryptPermission.UponRequest, WalletAdapterNetwork.Testnet);
   }, [setModalOpened]);
 
   return (

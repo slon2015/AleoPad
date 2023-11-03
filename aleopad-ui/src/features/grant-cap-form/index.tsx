@@ -1,5 +1,5 @@
 import { Button, Form, Input, InputNumber, Row, Skeleton } from "antd";
-import { ChangeEventHandler, useState } from "react";
+import { ChangeEventHandler, useCallback, useState } from "react";
 import {
   OnchainAleopadLaunchAdministartionRecord,
   U128,
@@ -44,10 +44,14 @@ export function GrantCapForm({
     grantCap.setGrantee(e.target.value || "");
   };
 
+  const onGrantClick = () => {
+    grantCap.mutation.mutate();
+  };
+
   return (
     <Form labelCol={{ span: 7 }}>
       <Form.Item
-        label="Grantee address"
+        label="Grantee"
         validateStatus={Boolean(addressValidationError) ? "error" : undefined}
         help={
           addressValidationError &&
@@ -59,7 +63,7 @@ export function GrantCapForm({
           onChange={onGranteeAddressChange}
         />
       </Form.Item>
-      <Form.Item label="Cap amount">
+      <Form.Item label="Amount">
         <InputNumber
           value={divideToDecimals(grantCap.amount, tokenDecimals).toNumber()}
           onChange={onCapAmountChange}
@@ -68,7 +72,9 @@ export function GrantCapForm({
       </Form.Item>
       <Form.Item help={grantCap.blocker}>
         <Row justify="center">
-          <Button type="primary">Grant</Button>
+          <Button type="primary" onClick={onGrantClick}>
+            Grant
+          </Button>
         </Row>
       </Form.Item>
     </Form>

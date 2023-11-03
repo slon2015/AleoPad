@@ -3,7 +3,7 @@ export type OnchainRecord<T extends object> = {
   program_id: string;
   microcredits: string;
   spent: boolean;
-  type: string;
+  recordName: string;
   data: T;
 };
 

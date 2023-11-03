@@ -1,4 +1,4 @@
-import { normalizeField } from "../common";
+import { Field, normalizeField, parsePrimitiveType } from "../common";
 import {
   ConnectedWalletContextState,
   OnchainAleopadLaunchAdministartionRecord,
@@ -17,9 +17,13 @@ export async function getLaunchAdministrationRecord(
 
   const administrationRecord = records
     .filter((r) => !r.spent)
-    .filter((r) => r.type === "AleopadLaunchAdministartion")
+    .filter((r) => r.recordName === "AleopadLaunchAdministartion")
     .map((r) => r as OnchainAleopadLaunchAdministartionRecord)
-    .find((r) => r.data.launch_id === normalizeField(launchId));
+    .find(
+      (r) =>
+        normalizeField(parsePrimitiveType(r.data.launch_id) as Field) ===
+        normalizeField(launchId)
+    );
 
   return administrationRecord;
 }

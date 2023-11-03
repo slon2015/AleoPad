@@ -41,13 +41,17 @@ export function LaunchCard({ launchId }: LaunchCardProps) {
           </Row>
         )}
         {administration.data && launch?.token && launch?.cap && (
-          <Row justify="center">
-            <Typography.Title level={4}>Grant cap</Typography.Title>
-            <GrantCapForm
-              administration={administration.data}
-              tokenDecimals={launch.token.decimals}
-            />
-          </Row>
+          <Space direction="vertical">
+            <Row justify="center">
+              <Typography.Title level={4}>Grant cap</Typography.Title>
+            </Row>
+            <Row justify="center">
+              <GrantCapForm
+                administration={administration.data}
+                tokenDecimals={launch.token.decimals}
+              />
+            </Row>
+          </Space>
         )}
         <Row justify="center">
           <Typography.Title level={4}>Schedule</Typography.Title>
