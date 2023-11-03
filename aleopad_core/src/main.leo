@@ -1,8 +1,8 @@
 // The 'aleopad_core' program.
 import credits.leo;
 
-// The 'aleopad_core_v0_1' program.
-program aleopad_core_v0_1.aleo {
+// The 'aleopad_core_v0_2' program.
+program aleopad_core_v0_2.aleo {
 
 
     // ===================== Records ======================
@@ -529,7 +529,13 @@ program aleopad_core_v0_1.aleo {
             launch_id: administration.launch_id
         }, administration.cap_commit_rand);
 
-        return (administration, cap) then finalize(to_commit, administration.launch_id);
+        let unspent_administration: AleopadLaunchAdministartion = AleopadLaunchAdministartion {
+            owner: administration.owner,
+            launch_id: administration.launch_id,
+            cap_commit_rand: administration.cap_commit_rand
+        };
+
+        return (unspent_administration, cap) then finalize(to_commit, administration.launch_id);
     }
 
     finalize issue_cap_to_user(to_commit: field, launch_id: field) {

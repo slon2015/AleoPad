@@ -1,5 +1,5 @@
 import credits.aleo;
-program aleopad_core_v0_1.aleo;
+program aleopad_core_v0_2.aleo;
 
 
 record LaunchTicket:
@@ -105,7 +105,7 @@ function create_launch:
     input r11 as scalar.private;
     cast r1 r0 r11 into r12 as AleopadLaunchAdministartion.record;
     async create_launch r0 r1 r2 r3 r4 r5 r6 r7 r8 r9 r10 into r13;    output r12 as AleopadLaunchAdministartion.record;
-    output r13 as aleopad_core_v0_1.aleo/create_launch.future;
+    output r13 as aleopad_core_v0_2.aleo/create_launch.future;
 
 finalize create_launch:
     input r0 as field.public;
@@ -157,7 +157,7 @@ function buy_private_without_cap:
     output r13 as BoughtTicketAmount.record;
     output r15 as credits.aleo/credits.record;
     output r16 as credits.aleo/credits.record;
-    output r17 as aleopad_core_v0_1.aleo/buy_private_without_cap.future;
+    output r17 as aleopad_core_v0_2.aleo/buy_private_without_cap.future;
 
 finalize buy_private_without_cap:
     input r0 as field.public;
@@ -215,7 +215,7 @@ function buy_private_with_cap:
     output r16 as credits.aleo/credits.record;
     output r17 as credits.aleo/credits.record;
     output r19 as TicketAmountCap.record;
-    output r20 as aleopad_core_v0_1.aleo/buy_private_with_cap.future;
+    output r20 as aleopad_core_v0_2.aleo/buy_private_with_cap.future;
 
 finalize buy_private_with_cap:
     input r0 as field.public;
@@ -248,7 +248,7 @@ function buy_public_without_cap:
     cast r0 into r9 as u128;
     async buy_public_without_cap self.caller r9 r1 r2 r8 into r10;    
     output r7 as credits.aleo/credits.record;
-    output r10 as aleopad_core_v0_1.aleo/buy_public_without_cap.future;
+    output r10 as aleopad_core_v0_2.aleo/buy_public_without_cap.future;
 
 finalize buy_public_without_cap:
     input r0 as address.public;
@@ -302,7 +302,7 @@ function buy_public_with_cap:
     async buy_public_with_cap self.caller r11 r4 r2 r3 r5 r14 into r17;    
     output r13 as credits.aleo/credits.record;
     output r16 as TicketAmountCap.record;
-    output r17 as aleopad_core_v0_1.aleo/buy_public_with_cap.future;
+    output r17 as aleopad_core_v0_2.aleo/buy_public_with_cap.future;
 
 finalize buy_public_with_cap:
     input r0 as address.public;
@@ -340,7 +340,8 @@ function validate_private_claim:
     input r0 as LaunchTicket.record;
     gt r0.amount 0u128 into r1;
     assert.eq r1 true;
-    async validate_private_claim r0.launch_id into r2;    output r2 as aleopad_core_v0_1.aleo/validate_private_claim.future;
+    async validate_private_claim r0.launch_id into r2;
+    output r2 as aleopad_core_v0_2.aleo/validate_private_claim.future;
 
 finalize validate_private_claim:
     input r0 as field.public;
@@ -359,7 +360,8 @@ function validate_public_claim:
     input r1 as u128.private;
     gt r1 0u128 into r2;
     assert.eq r2 true;
-    async validate_public_claim self.caller r0 r1 into r3;    output r3 as aleopad_core_v0_1.aleo/validate_public_claim.future;
+    async validate_public_claim self.caller r0 r1 into r3;
+    output r3 as aleopad_core_v0_2.aleo/validate_public_claim.future;
 
 finalize validate_public_claim:
     input r0 as address.public;
@@ -392,9 +394,11 @@ function issue_cap_to_user:
     cast r1 r0.launch_id r2 into r3 as TicketAmountCap.record;
     cast r1 r0.launch_id into r4 as CapIssueKey;
     commit.bhp256 r4 r0.cap_commit_rand into r5 as field;
-    async issue_cap_to_user r5 r0.launch_id into r6;    output r0 as AleopadLaunchAdministartion.record;
+    cast r0.owner r0.launch_id r0.cap_commit_rand into r6 as AleopadLaunchAdministartion.record;
+    async issue_cap_to_user r5 r0.launch_id into r7;
+    output r6 as AleopadLaunchAdministartion.record;
     output r3 as TicketAmountCap.record;
-    output r6 as aleopad_core_v0_1.aleo/issue_cap_to_user.future;
+    output r7 as aleopad_core_v0_2.aleo/issue_cap_to_user.future;
 
 finalize issue_cap_to_user:
     input r0 as field.public;
