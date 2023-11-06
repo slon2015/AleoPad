@@ -1,8 +1,8 @@
-import aleopad_core_v0_2.leo;
-import aleopad_tokens_v0_2.leo;
+import aleopad_core_v0_3.leo;
+import aleopad_tokens_v0_3.leo;
 
-// The 'aleopad_management_v0_2' program.
-program aleopad_management_v0_2.aleo {
+// The 'aleopad_management_v0_3' program.
+program aleopad_management_v0_3.aleo {
 
     struct PublicLaunchParams {
         launch_id: field,
@@ -30,8 +30,8 @@ program aleopad_management_v0_2.aleo {
         cap_commit_rand: scalar,
         public token_params: PublicTokenParams,
         token_admin: address
-    ) -> (aleopad_tokens_v0_2.leo/AleopadTokenAdministration, aleopad_core_v0_2.leo/AleopadLaunchAdministartion) {
-        let launch: AleopadLaunchAdministartion = aleopad_core_v0_2.leo/create_launch(
+    ) -> (aleopad_tokens_v0_3.leo/AleopadTokenAdministration, aleopad_core_v0_3.leo/AleopadLaunchAdministartion) {
+        let launch: AleopadLaunchAdministartion = aleopad_core_v0_3.leo/create_launch(
             launch_params.launch_id,
             launch_params.launch_admin,
             launch_params.sell_start_block_height, 
@@ -46,7 +46,7 @@ program aleopad_management_v0_2.aleo {
             cap_commit_rand
         );
 
-        let token: AleopadTokenAdministration = aleopad_tokens_v0_2.leo/create_token_with_launch(
+        let token: AleopadTokenAdministration = aleopad_tokens_v0_3.leo/create_token_with_launch(
             token_params.token_id, 
             token_params.name,
             token_params.symbol,
@@ -65,8 +65,8 @@ program aleopad_management_v0_2.aleo {
     transition set_up_new_custom_token(
         public launch_params: PublicLaunchParams,
         cap_commit_rand: scalar
-    ) -> (aleopad_core_v0_2.leo/AleopadLaunchAdministartion) {
-        let launch: AleopadLaunchAdministartion = aleopad_core_v0_2.leo/create_launch(
+    ) -> (aleopad_core_v0_3.leo/AleopadLaunchAdministartion) {
+        let launch: AleopadLaunchAdministartion = aleopad_core_v0_3.leo/create_launch(
             launch_params.launch_id,
             launch_params.launch_admin,
             launch_params.sell_start_block_height, 

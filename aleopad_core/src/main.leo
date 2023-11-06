@@ -1,8 +1,8 @@
 // The 'aleopad_core' program.
 import credits.leo;
 
-// The 'aleopad_core_v0_2' program.
-program aleopad_core_v0_2.aleo {
+// The 'aleopad_core_v0_3' program.
+program aleopad_core_v0_3.aleo {
 
 
     // ===================== Records ======================
@@ -52,19 +52,9 @@ program aleopad_core_v0_2.aleo {
         is_cap_enabled: bool
     }
 
-    struct UserPublicTicketAmountKeyData {
-        user: address
-        launch_id: field
-    }
-
     struct CapIssueKey {
         user: address,
         launch_id: field
-    }
-
-    struct UserPublicTicketAmount {
-        ticket_amount: u128
-        claimed_amount: u128
     }
 
     // ===================== Mappings ====================
@@ -74,7 +64,6 @@ program aleopad_core_v0_2.aleo {
     mapping issued_caps: field => bool;
 
     mapping public_launch_total_amounts: field => u128;
-    mapping public_tickets: field => UserPublicTicketAmount;
 
     // ===================== Ensure ======================
 
@@ -368,9 +357,11 @@ program aleopad_core_v0_2.aleo {
 
     transition buy_public_without_cap (
         amount_microcredits: field,
-        launch_id: field, 
+        launch_id: field,
+        credits_ratio_numerator: u128,
+        credits_ratio_denominator: u128, 
         admin: address
-    ) -> (credits.leo/credits) {
+    ) -> (LaunchTicket, BoughtTicketAmount, credits.leo/credits) {
         ensure_amount_in_u128_borders(amount_microcredits);
 
         let to_admin: credits = credits.leo/transfer_public_to_private(
@@ -378,11 +369,28 @@ program aleopad_core_v0_2.aleo {
             amount_microcredits as u64
         );
 
-        return to_admin then finalize(
+        let asset_amount: u128 = (amount_microcredits as u128 * credits_ratio_numerator) / credits_ratio_denominator;
+
+        let new_ticket: LaunchTicket = LaunchTicket {
+            owner: self.caller,
+            launch_id,
+            amount: asset_amount
+        };
+
+        let bought_ticket: BoughtTicketAmount = BoughtTicketAmount {
+            owner: admin,
+            launch_id,
+            amount: asset_amount
+        };
+
+        return (new_ticket, bought_ticket, to_admin) then finalize(
             self.caller,
             amount_microcredits as u128,
             launch_id,
-            admin
+            admin,
+            credits_ratio_numerator,
+            credits_ratio_denominator,
+            asset_amount
         );
     }
 
@@ -390,26 +398,17 @@ program aleopad_core_v0_2.aleo {
         buyer: address,
         amount_microcredits: u128,
         launch_id: field, 
-        admin: address
+        admin: address,
+        credits_ratio_numerator: u128,
+        credits_ratio_denominator: u128,
+        asset_amount: u128
     ) {
         let launch: LaunchpadParams = launches.get(launch_id);
         ensure_launch_admin(launch, admin);
         ensure_launch_sell_block(launch, block.height);
         ensure_public_sell_flag(launch.is_public_sells_enabled);
         ensure_cap_non_set(launch.is_cap_enabled);
-
-        let asset_amount: u128 = (amount_microcredits * launch.credits_ratio_numerator) / launch.credits_ratio_denominator;
-
-        let public_ticket_id: field = BHP256::hash_to_field(UserPublicTicketAmountKeyData {user: buyer, launch_id});
-        let old_public_ticket: UserPublicTicketAmount = Mapping::get_or_use(public_tickets, public_ticket_id, UserPublicTicketAmount { 
-            ticket_amount: 0u128, 
-            claimed_amount: 0u128
-        });
-
-        Mapping::set(public_tickets, public_ticket_id, UserPublicTicketAmount {
-            ticket_amount: old_public_ticket.ticket_amount + asset_amount,
-            claimed_amount: old_public_ticket.claimed_amount
-        });
+        ensure_launch_credits_ratio(launch, credits_ratio_numerator, credits_ratio_denominator);
 
         let old_total_amount: u128 = Mapping::get_or_use(public_launch_total_amounts, launch_id, 0u128);
         Mapping::set(public_launch_total_amounts, launch_id, old_total_amount + asset_amount);
@@ -422,7 +421,7 @@ program aleopad_core_v0_2.aleo {
         credits_ratio_denominator: u128,
         launch_id: field, 
         admin: address
-    ) -> (credits.leo/credits, TicketAmountCap) {
+    ) -> (LaunchTicket, BoughtTicketAmount, credits.leo/credits, TicketAmountCap) {
         ensure_amount_in_u64_borders(amount_microcredits);
 
         let asset_amount: u128 = (amount_microcredits as u128 * credits_ratio_numerator) / credits_ratio_denominator;
@@ -440,7 +439,19 @@ program aleopad_core_v0_2.aleo {
             amount_to_buy
         };
 
-        return (to_admin, cap_change) then finalize(
+        let new_ticket: LaunchTicket = LaunchTicket {
+            owner: self.caller,
+            launch_id,
+            amount: asset_amount
+        };
+
+        let bought_ticket: BoughtTicketAmount = BoughtTicketAmount {
+            owner: admin,
+            launch_id,
+            amount: asset_amount
+        };
+
+        return (new_ticket, bought_ticket, to_admin, cap_change) then finalize(
             self.caller,
             asset_amount,
             launch_id,
@@ -465,54 +476,20 @@ program aleopad_core_v0_2.aleo {
         ensure_public_sell_flag(launch.is_private_sells_enabled);
         ensure_cap_set(launch.is_cap_enabled);
 
-        let public_ticket_id: field = BHP256::hash_to_field(UserPublicTicketAmountKeyData {user: buyer, launch_id});
-        let old_public_ticket: UserPublicTicketAmount = Mapping::get_or_use(public_tickets, public_ticket_id, UserPublicTicketAmount { 
-            ticket_amount: 0u128, 
-            claimed_amount: 0u128
-        });
-
-        Mapping::set(public_tickets, public_ticket_id, UserPublicTicketAmount {
-            ticket_amount: old_public_ticket.ticket_amount + asset_amount,
-            claimed_amount: old_public_ticket.claimed_amount
-        });
-
         let old_total_amount: u128 = Mapping::get_or_use(public_launch_total_amounts, launch_id, 0u128);
         Mapping::set(public_launch_total_amounts, launch_id, old_total_amount + asset_amount);
     }
 
-    // ===================== Private claim ======================
+    // ===================== Claim ======================
 
-    transition validate_private_claim(input: LaunchTicket) {
+    transition validate_claim(input: LaunchTicket) {
         assert(input.amount > 0u128);
         return then finalize(input.launch_id);
     }
 
-    finalize validate_private_claim (launch_id: field) {
+    finalize validate_claim (launch_id: field) {
         let li: LaunchpadParams = Mapping::get(launches, launch_id);
         validate_launch_claim_block(li.claim_start_block_height, li.claim_duration_in_blocks, block.height);
-    }
-
-    // ===================== Public claim ======================
-
-    transition validate_public_claim(launch_id: field, asset_amount: u128) {
-        assert(asset_amount > 0u128);
-        return then finalize(self.caller, launch_id, asset_amount);
-    }
-
-    finalize validate_public_claim(claimer: address, launch_id: field, asset_amount: u128) {
-        let li: LaunchpadParams = Mapping::get(launches, launch_id);
-        validate_launch_claim_block(li.claim_start_block_height, li.claim_duration_in_blocks, block.height);
-
-        let public_ticket_id: field = BHP256::hash_to_field(UserPublicTicketAmountKeyData {user: claimer, launch_id});
-        let pt: UserPublicTicketAmount = Mapping::get_or_use(public_tickets, public_ticket_id, UserPublicTicketAmount { 
-            ticket_amount: 0u128, 
-            claimed_amount: 0u128
-        });
-        assert(asset_amount <= pt.ticket_amount - pt.claimed_amount);
-        Mapping::set(public_tickets, public_ticket_id, UserPublicTicketAmount { 
-            ticket_amount: pt.ticket_amount, 
-            claimed_amount: pt.claimed_amount + asset_amount
-        });
     }
 
     // ===================== Cap management ======================

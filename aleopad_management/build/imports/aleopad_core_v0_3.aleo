@@ -1,4 +1,4 @@
-program aleopad_core_v0_2.aleo;
+program aleopad_core_v0_3.aleo;
 
 record BoughtTicketAmount:
     owner as address.private;
@@ -34,9 +34,11 @@ function create_launch:
     input r10 as boolean.public;
     input r11 as scalar.private;
     cast r1 r0 r11 into r12 as AleopadLaunchAdministartion.record;
-    output r12 as AleopadLaunchAdministartion.record;
+    async create_launch into r13;
 
-    finalize;
+    output r12 as AleopadLaunchAdministartion.record;
+    output r13 as aleopad_core_v0_3.aleo/create_launch.future;
+
 
 finalize create_launch:
     assert.eq true true;

@@ -1,5 +1,5 @@
-import aleopad_core_v0_2.aleo;
-program aleopad_tokens_v0_2.aleo;
+import aleopad_core_v0_3.aleo;
+program aleopad_tokens_v0_3.aleo;
 
 
 record PrivateToken:
@@ -70,7 +70,7 @@ function create_token:
     cast r4 r0 into r6 as AleopadTokenAdministration.record;
     async create_token r0 r1 r2 r3 self.caller into r7;
     output r6 as AleopadTokenAdministration.record;
-    output r7 as aleopad_tokens_v0_2.aleo/create_token.future;
+    output r7 as aleopad_tokens_v0_3.aleo/create_token.future;
 
 finalize create_token:
     input r0 as field.public;
@@ -99,7 +99,7 @@ function create_token_with_launch:
     cast r5 r0 into r7 as AleopadTokenAdministration.record;
     async create_token_with_launch r0 r4 r1 r2 r3 self.caller into r8;
     output r7 as AleopadTokenAdministration.record;
-    output r8 as aleopad_tokens_v0_2.aleo/create_token_with_launch.future;
+    output r8 as aleopad_tokens_v0_3.aleo/create_token_with_launch.future;
 
 finalize create_token_with_launch:
     input r0 as field.public;
@@ -130,7 +130,7 @@ function transfer_public:
     input r1 as address.public;
     input r2 as u128.public;
     async transfer_public r0 self.caller r1 r2 into r3;
-    output r3 as aleopad_tokens_v0_2.aleo/transfer_public.future;
+    output r3 as aleopad_tokens_v0_3.aleo/transfer_public.future;
 
 finalize transfer_public:
     input r0 as field.public;
@@ -158,7 +158,7 @@ function approve:
     input r1 as address.public;
     input r2 as u128.public;
     async approve r0 self.caller r1 r2 into r3;
-    output r3 as aleopad_tokens_v0_2.aleo/approve.future;
+    output r3 as aleopad_tokens_v0_3.aleo/approve.future;
 
 finalize approve:
     input r0 as field.public;
@@ -178,7 +178,7 @@ function transfer_from:
     input r2 as address.public;
     input r3 as u128.public;
     async transfer_from self.caller r0 r1 r2 r3 into r4;
-    output r4 as aleopad_tokens_v0_2.aleo/transfer_from.future;
+    output r4 as aleopad_tokens_v0_3.aleo/transfer_from.future;
 
 finalize transfer_from:
     input r0 as address.public;
@@ -213,7 +213,7 @@ function transfer_public_to_private:
     hash.bhp256 r3 into r4 as field;
     async transfer_public_to_private r0 self.caller r2 into r5;
     output r3 as PrivateToken.record;
-    output r5 as aleopad_tokens_v0_2.aleo/transfer_public_to_private.future;
+    output r5 as aleopad_tokens_v0_3.aleo/transfer_public_to_private.future;
 
 finalize transfer_public_to_private:
     input r0 as field.public;
@@ -236,7 +236,7 @@ function transfer_private_to_public:
     cast r0.owner r0.token r3 into r4 as PrivateToken.record;
     async transfer_private_to_public r0.token r1 r2 into r5;
     output r4 as PrivateToken.record;
-    output r5 as aleopad_tokens_v0_2.aleo/transfer_private_to_public.future;
+    output r5 as aleopad_tokens_v0_3.aleo/transfer_private_to_public.future;
 
 finalize transfer_private_to_public:
     input r0 as field.public;
@@ -277,7 +277,7 @@ function enable_launch:
     cast r0.owner r0.token into r2 as AleopadTokenAdministration.record;
     async enable_launch r0.token r1 into r3;
     output r2 as AleopadTokenAdministration.record;
-    output r3 as aleopad_tokens_v0_2.aleo/enable_launch.future;
+    output r3 as aleopad_tokens_v0_3.aleo/enable_launch.future;
 
 finalize enable_launch:
     input r0 as field.public;
@@ -296,15 +296,15 @@ finalize enable_launch:
 
 function claim_private:
     input r0 as field.private;
-    input r1 as aleopad_core_v0_2.aleo/LaunchTicket.record;
+    input r1 as aleopad_core_v0_3.aleo/LaunchTicket.record;
     cast r1.owner r0 r1.amount into r2 as PrivateToken.record;
-    call aleopad_core_v0_2.aleo/validate_private_claim r1 into r3;
+    call aleopad_core_v0_3.aleo/validate_claim r1 into r3;
     async claim_private r3 r0 r1.launch_id into r4;
     output r2 as PrivateToken.record;
-    output r4 as aleopad_tokens_v0_2.aleo/claim_private.future;
+    output r4 as aleopad_tokens_v0_3.aleo/claim_private.future;
 
 finalize claim_private:
-    input r0 as aleopad_core_v0_2/validate_private_claim;
+    input r0 as aleopad_core_v0_3.aleo/validate_claim.future;
     input r1 as field.public;
     input r2 as field.public;
     await r0;
@@ -316,14 +316,13 @@ finalize claim_private:
 
 function claim_public:
     input r0 as field.private;
-    input r1 as field.private;
-    input r2 as u128.private;
-    call aleopad_core_v0_2.aleo/validate_public_claim r1 r2 into r3;
-    async claim_public r3 r0 r1 self.caller r2 into r4;
-    output r4 as aleopad_tokens_v0_2.aleo/claim_public.future;
+    input r1 as aleopad_core_v0_3.aleo/LaunchTicket.record;
+    call aleopad_core_v0_3.aleo/validate_claim r1 into r2;
+    async claim_public r2 r0 r1.launch_id self.caller r1.amount into r3;
+    output r3 as aleopad_tokens_v0_3.aleo/claim_public.future;
 
 finalize claim_public:
-    input r0 as aleopad_core_v0_2/validate_public_claim;
+    input r0 as aleopad_core_v0_3.aleo/validate_claim.future;
     input r1 as field.public;
     input r2 as field.public;
     input r3 as address.public;

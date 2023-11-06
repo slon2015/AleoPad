@@ -1,5 +1,5 @@
-// The 'aleopad_core_v0_2' program.
-program aleopad_core_v0_2.aleo {
+// The 'aleopad_core_v0_3' program.
+program aleopad_core_v0_3.aleo {
 
     // ===================== Records ======================
 

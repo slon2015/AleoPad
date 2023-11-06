@@ -1,6 +1,6 @@
-import aleopad_core_v0_2.leo;
+import aleopad_core_v0_3.leo;
 
-program aleopad_tokens_v0_2.aleo {
+program aleopad_tokens_v0_3.aleo {
     // BalanceKeyData => balance
     mapping balances: field => u128;
     // AllowanceKeyData => amount
@@ -281,14 +281,14 @@ program aleopad_tokens_v0_2.aleo {
 
     // ========================= claim =========================
 
-    transition claim_private(token: field, ticket: aleopad_core_v0_2.leo/LaunchTicket) -> PrivateToken {
+    transition claim_private(token: field, ticket: aleopad_core_v0_3.leo/LaunchTicket) -> PrivateToken {
         let pt: PrivateToken = PrivateToken {
             owner: ticket.owner,
             token,
             amount: ticket.amount
         };
 
-        aleopad_core_v0_2.leo/validate_private_claim(ticket);
+        aleopad_core_v0_3.leo/validate_claim(ticket);
 
         return pt then finalize(token, ticket.launch_id);
     }
@@ -298,10 +298,10 @@ program aleopad_tokens_v0_2.aleo {
         assert(token_launches.get(tlid));
     }
 
-    transition claim_public(token: field, launch: field, amount: u128) {
-        aleopad_core_v0_2.leo/validate_public_claim(launch, amount);
+    transition claim_public(token: field, ticket: aleopad_core_v0_3.leo/LaunchTicket) {
+        aleopad_core_v0_3.leo/validate_claim(ticket);
 
-        return then finalize(token, launch, self.caller, amount);
+        return then finalize(token, ticket.launch_id, self.caller, ticket.amount);
     }
 
     finalize claim_public(token: field, launch: field, claimer: address, amount: u128) {
