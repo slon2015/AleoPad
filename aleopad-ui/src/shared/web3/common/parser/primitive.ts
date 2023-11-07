@@ -1,3 +1,4 @@
+import { cleanupVisibilityModifier } from "./cleanup";
 import { Field, Group, I128, I64, Scalar, U128, U64 } from "./types";
 
 const primitiveInlineTypes: Array<string> = [
@@ -38,9 +39,6 @@ function checkIsBool(value: string): boolean {
   return value === "true" || value === "false";
 }
 
-const PUBLIC_POSTFIX = ".public";
-const PRIVATE_POSTFIX = ".private";
-
 export function parsePrimitiveType(
   value: string
 ):
@@ -54,13 +52,8 @@ export function parsePrimitiveType(
   | I128
   | U64
   | U128 {
-  value = value.trim();
-  if (value.endsWith(PUBLIC_POSTFIX)) {
-    value = value.substring(0, value.length - PUBLIC_POSTFIX.length);
-  }
-  if (value.endsWith(PRIVATE_POSTFIX)) {
-    value = value.substring(0, value.length - PRIVATE_POSTFIX.length);
-  }
+  value = cleanupVisibilityModifier(value.trim());
+
   const inlineType = checkInlineType(value);
   value = inlineType
     ? value.substring(0, value.length - inlineType.length)

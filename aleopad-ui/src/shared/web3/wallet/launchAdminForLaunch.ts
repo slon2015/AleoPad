@@ -1,4 +1,4 @@
-import { Field, normalizeField, parsePrimitiveType } from "../common";
+import { cleanupVisibilityModifier, normalizeField } from "../common";
 import {
   ConnectedWalletContextState,
   OnchainAleopadLaunchAdministartionRecord,
@@ -21,8 +21,7 @@ export async function getLaunchAdministrationRecord(
     .map((r) => r as OnchainAleopadLaunchAdministartionRecord)
     .find(
       (r) =>
-        normalizeField(parsePrimitiveType(r.data.launch_id) as Field) ===
-        normalizeField(launchId)
+        cleanupVisibilityModifier(r.data.launch_id) === normalizeField(launchId)
     );
 
   return administrationRecord;

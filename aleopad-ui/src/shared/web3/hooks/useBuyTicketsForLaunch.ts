@@ -64,7 +64,8 @@ export function useBuyTickets(launchId: string | Field): BuyTicketMethods {
           launch.data,
           creditsAmount,
           selectedPayment,
-          amounts.privateRecords
+          amounts.privateRecords,
+          cap.data
         );
       }
     }

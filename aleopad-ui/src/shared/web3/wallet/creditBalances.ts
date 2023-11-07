@@ -23,8 +23,6 @@ export async function getCredits(wallet: Arg): Promise<CreditAmounts> {
       wallet.requestRecords("credits.aleo"),
     ]);
 
-  debugger;
-
   return {
     publicAmount: publicBalance
       ? (parsePrimitiveType(publicBalance) as U64)

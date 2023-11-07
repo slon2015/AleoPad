@@ -55,6 +55,8 @@ export function buildTransaction(
         [
           normalizeField(ctx.requiredCredits.toString(10)),
           normalizeField(launch.id),
+          normalizeU128(launch.numerator),
+          normalizeU128(launch.denominator),
           launch.adminAddress,
         ],
         BUY_TICKET_FEE_AMOUNT
