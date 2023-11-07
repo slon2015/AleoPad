@@ -2,6 +2,7 @@ import { divideToDecimals, fieldToText, useClaimTicket } from "shared/web3";
 
 import { Button, Form, Row, Skeleton, Space, Typography } from "antd";
 import { TicketRecordsList } from "./ticket-records-list";
+import ClaimMode from "./claim-mode";
 
 interface ClaimFormProps {
   launchId: string;
@@ -24,16 +25,10 @@ export default function BuyForm({ launchId, tokenId }: ClaimFormProps) {
       <Space direction="vertical">
         <Form title="Claim token" layout="vertical">
           <Form.Item>
-            <Typography.Text
-              onClick={() => claim.selectTicket("public")}
-              mark={claim.selectedTicket === "public"}
-            >
-              Public ticket amount:{" "}
-              {divideToDecimals(claim.publicTicketAmount, claim.token.decimals)
-                .dp(2)
-                .toString()}{" "}
-              {fieldToText(claim.token.symbol)}
-            </Typography.Text>
+            <ClaimMode
+              currentMode={claim.privacy}
+              selectMode={(m) => claim.setPrivacy(m)}
+            />
           </Form.Item>
           <Form.Item>
             <TicketRecordsList

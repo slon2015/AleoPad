@@ -1,7 +1,6 @@
 import BigNumber from "bignumber.js";
 
-import { Field, U128 } from "../../common";
-import { ParsedLaunch } from "../../types";
+import { Field } from "../../common";
 import { CreditAmounts, TicketRecord } from "../../wallet";
 
 import {
@@ -13,15 +12,13 @@ import {
 import { CLAIM_TICKET_FEE_AMOUNT } from "./constants";
 
 export function createPublicContext(
-  launch: ParsedLaunch,
   tokenId: Field,
-  publicTicketAmount: U128
+  record: TicketRecord
 ): PublicClaimContext {
   return {
-    launchId: launch.id,
-    publicTicketAmount,
-    requiredCredits: BigNumber(CLAIM_TICKET_FEE_AMOUNT),
     tokenId,
+    ticket: record,
+    requiredCredits: BigNumber(CLAIM_TICKET_FEE_AMOUNT),
     type: "public-claim",
   };
 }
@@ -43,6 +40,9 @@ export function checkContext(
   context: NonValidatedClaimContext,
   credits: CreditAmounts
 ): ValidatedClaimContext {
+  if (context.ticket.amount.lte(0)) {
+    throw new Error("Ticket is empty");
+  }
   switch (context.type) {
     case "private-claim":
       const feeRecord = credits.privateRecords.find((r) =>
@@ -51,16 +51,10 @@ export function checkContext(
       if (!feeRecord) {
         throw new Error("Record for fee payment not found");
       }
-      if (context.ticket.amount.lte(0)) {
-        throw new Error("Ticket is empty");
-      }
       return { ...context, feeRecord } as ValidatedClaimContext;
     case "public-claim":
       if (context.requiredCredits.gt(credits.publicAmount)) {
         throw new Error("Public credits for fee payment not found");
-      }
-      if (context.publicTicketAmount.lte(0)) {
-        throw new Error("Ticket is empty");
       }
 
       return context as ValidatedClaimContext;

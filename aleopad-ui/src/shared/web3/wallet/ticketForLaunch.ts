@@ -11,7 +11,6 @@ type Arg = Pick<ConnectedWalletContextState, "publicKey" | "requestRecords"> & {
 };
 
 export type Tickets = {
-  publicTicketAmount: U128;
   privateTickets: Array<TicketRecord>;
 };
 
@@ -30,20 +29,9 @@ export async function getTicketForLaunch({
   publicKey,
   requestRecords,
 }: Arg): Promise<Tickets> {
-  const [publicTicket, records]: [string | null, Array<OnchainRecord<any>>] =
-    await Promise.all([
-      getPropgramMapping(
-        process.env.REACT_APP_CORE_PROGRAMM_ID!,
-        "public_tickets",
-        publicTicketId(launchId, publicKey)
-      ),
-      requestRecords(process.env.REACT_APP_CORE_PROGRAMM_ID!),
-    ]);
+  const records = await requestRecords(process.env.REACT_APP_CORE_PROGRAMM_ID!);
 
   return {
-    publicTicketAmount: publicTicket
-      ? (parsePrimitiveType(publicTicket) as U128)
-      : new U128(0),
     privateTickets: records
       .filter((r) => r.recordName === "LaunchTicket")
       .filter((r) => !r.spent)

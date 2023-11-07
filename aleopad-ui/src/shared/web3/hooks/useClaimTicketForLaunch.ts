@@ -17,12 +17,13 @@ import { useToken } from "./useToken";
 type Response =
   | {
       loading: false;
-      publicTicketAmount: U128;
       launch: ParsedLaunch;
       token: OnchainToken;
       records: Array<TicketRecord>;
-      selectedTicket: "public" | TicketRecord | undefined;
-      selectTicket(ticket: "public" | TicketRecord): void;
+      selectedTicket: TicketRecord | undefined;
+      selectTicket(ticket: TicketRecord): void;
+      privacy: "public" | "private";
+      setPrivacy(privacy: "public" | "private"): void;
       enabled: boolean;
       blocker: string | undefined;
       mutation: UseMutationResult<void, unknown, void, unknown>;
@@ -33,9 +34,8 @@ export function useClaimTicket(launchId: string, tokenId: string): Response {
   const queryClient = useQueryClient();
   const wallet = useWallet();
 
-  const [selectedTicket, selectTicket] = useState<
-    "public" | TicketRecord | undefined
-  >();
+  const [selectedTicket, selectTicket] = useState<TicketRecord | undefined>();
+  const [privacy, setPrivacy] = useState<"public" | "private">("public");
 
   const tickets = useLaunchTicket(launchId);
   const launch = useLaunch(launchId);
@@ -49,9 +49,7 @@ export function useClaimTicket(launchId: string, tokenId: string): Response {
 
   useEffect(() => {
     if (!selectedTicket && launch.data) {
-      if (launch.data.flags.isPublicSellsEnabled) {
-        selectTicket("public");
-      } else if (
+      if (
         credits.amounts &&
         tickets.data?.privateTickets &&
         tickets.data.privateTickets.length > 0
@@ -62,14 +60,10 @@ export function useClaimTicket(launchId: string, tokenId: string): Response {
   }, [launch.data, tickets.data, selectedTicket, credits.amounts]);
 
   const context = useMemo(() => {
-    if (launch.data) {
-      if (selectedTicket === "public" && tickets.data?.publicTicketAmount) {
-        return claimTicket.createPublicContext(
-          launch.data,
-          parsedTokenId,
-          tickets.data.publicTicketAmount
-        );
-      } else if (typeof selectedTicket === "object") {
+    if (launch.data && selectedTicket) {
+      if (privacy === "public") {
+        return claimTicket.createPublicContext(parsedTokenId, selectedTicket);
+      } else {
         return claimTicket.createPrivateContext(parsedTokenId, selectedTicket);
       }
     }
@@ -146,8 +140,9 @@ export function useClaimTicket(launchId: string, tokenId: string): Response {
       mutation,
       selectedTicket,
       selectTicket,
+      privacy,
+      setPrivacy,
       records: tickets.data.privateTickets,
-      publicTicketAmount: tickets.data.publicTicketAmount,
     };
   } else {
     return {
