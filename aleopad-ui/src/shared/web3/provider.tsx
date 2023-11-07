@@ -1,5 +1,4 @@
 import { WalletProvider as AleoWalletAdatapter } from "@demox-labs/aleo-wallet-adapter-react";
-import { WalletModalProvider } from "@demox-labs/aleo-wallet-adapter-reactui";
 import { LeoWalletAdapter } from "@demox-labs/aleo-wallet-adapter-leo";
 import {
   DecryptPermission,
@@ -24,7 +23,7 @@ const WalletProvider = ({ children }: PropsWithChildren) => {
       network={WalletAdapterNetwork.Testnet}
       autoConnect
     >
-      <WalletModalProvider>{children}</WalletModalProvider>
+      {children}
     </AleoWalletAdatapter>
   );
 };

@@ -5,10 +5,9 @@
   "homepage": "https://aleopad.com",
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
-    "@demox-labs/aleo-wallet-adapter-base": "^0.0.18",
-    "@demox-labs/aleo-wallet-adapter-leo": "^0.0.17",
-    "@demox-labs/aleo-wallet-adapter-react": "^0.0.17",
-    "@demox-labs/aleo-wallet-adapter-reactui": "^0.0.29",
+    "@demox-labs/aleo-wallet-adapter-base": "^0.0.20",
+    "@demox-labs/aleo-wallet-adapter-leo": "^0.0.19",
+    "@demox-labs/aleo-wallet-adapter-react": "^0.0.19",
     "@tanstack/react-query-devtools": "^4.35.7",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",

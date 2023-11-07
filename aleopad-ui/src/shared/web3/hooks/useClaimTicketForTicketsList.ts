@@ -1,13 +1,14 @@
 import { UseMutationResult, useMutation, useQueryClient } from "react-query";
 import { Field, normalizeField, parsePrimitiveType } from "../common";
 import { TicketRecord } from "../wallet";
-import { useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import { launchTicketQueryKey } from "./useLaunchTicket";
 import { claimTicket } from "../write";
 import { useCreditsAmounts } from "./useCreditsAmounts";
 import { useWallet } from "./useWallet";
 import { ConnectedWalletContextState } from "../types";
 import { useToken } from "./useToken";
+import { AwaitTxContext } from "widgets/await-tx-modal";
 
 type Response =
   | {
@@ -28,6 +29,7 @@ export function useClaimTicketForTicketsList(
   const wallet = useWallet();
 
   const [privacy, setPrivacy] = useState<"public" | "private">("public");
+  const { setTransaction } = useContext(AwaitTxContext);
 
   const token = useToken(tokenId);
   const credits = useCreditsAmounts();
@@ -68,11 +70,12 @@ export function useClaimTicketForTicketsList(
   const mutation = useMutation<void, Error>(
     async () => {
       if (enabled) {
-        return claimTicket.claim(
+        const txId = await claimTicket.claim(
           context!,
           wallet as ConnectedWalletContextState,
           credits.amounts!
         );
+        setTransaction(txId, "Claim ticket");
       }
     },
     {

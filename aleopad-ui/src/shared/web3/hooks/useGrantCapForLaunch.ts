@@ -1,6 +1,6 @@
 import { UseMutationResult, useMutation } from "react-query";
 import { U128, normalizeField } from "../common";
-import { useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import { grantCap } from "../write";
 import { useCreditsAmounts } from "./useCreditsAmounts";
 import { useWallet } from "./useWallet";
@@ -8,6 +8,7 @@ import {
   ConnectedWalletContextState,
   OnchainAleopadLaunchAdministartionRecord,
 } from "../types";
+import { AwaitTxContext } from "widgets/await-tx-modal";
 
 type Response =
   | {
@@ -27,6 +28,7 @@ export function useGrantCapForLaunch(
 ): Response {
   const wallet = useWallet();
   const credits = useCreditsAmounts();
+  const { setTransaction } = useContext(AwaitTxContext);
 
   const [amount, setAmount] = useState(new U128(0));
   const [grantee, setGrantee] = useState<string | null>(null);
@@ -52,11 +54,12 @@ export function useGrantCapForLaunch(
   const mutation = useMutation(
     async () => {
       if (enabled) {
-        grantCap.grant(
+        const txId = await grantCap.grant(
           context!,
           wallet as ConnectedWalletContextState,
           credits.amounts!
         );
+        setTransaction(txId, "Cap grant");
       }
     },
     {

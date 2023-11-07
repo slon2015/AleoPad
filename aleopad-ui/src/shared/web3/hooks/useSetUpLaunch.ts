@@ -3,6 +3,8 @@ import { useCreditsAmounts } from "./useCreditsAmounts";
 import { useWallet } from "./useWallet";
 import { setUpLaunch } from "../write";
 import { ConnectedWalletContextState } from "../types";
+import { useContext } from "react";
+import { AwaitTxContext } from "widgets/await-tx-modal";
 
 type SetUpLaunchMethod =
   | {
@@ -16,6 +18,7 @@ type SetUpLaunchMethod =
 
 export function useSetUpLaunch(): SetUpLaunchMethod {
   const wallet = useWallet();
+  const { setTransaction } = useContext(AwaitTxContext);
 
   const queryClient = useQueryClient();
   const { amounts } = useCreditsAmounts();
@@ -40,11 +43,12 @@ export function useSetUpLaunch(): SetUpLaunchMethod {
   const mutation = useMutation<void, Error, setUpLaunch.NewLaunch>(
     async (dto: setUpLaunch.NewLaunch) => {
       if (checkEnabled()) {
-        return setUpLaunch.setUp(
+        const txId = await setUpLaunch.setUp(
           context(dto),
           wallet as ConnectedWalletContextState,
           amounts!.publicAmount
         );
+        setTransaction(txId, "Launch set up");
       }
     },
     {

@@ -7,7 +7,8 @@ import { useLaunch } from "./useLaunch";
 import { capQueryKey, useCapForLaunch } from "./useCapForLaunch";
 import { ConnectedWalletContextState, ParsedLaunch } from "../types";
 import { CreditAmounts, CreditsRecord } from "../wallet";
-import { useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
+import { AwaitTxContext } from "widgets/await-tx-modal";
 
 type BuyTicketMethods =
   | {
@@ -34,6 +35,7 @@ export function useBuyTickets(launchId: string | Field): BuyTicketMethods {
 
   const queryClient = useQueryClient();
   const { amounts } = useCreditsAmounts();
+  const { setTransaction } = useContext(AwaitTxContext);
 
   const [selectedPayment, setSelectedPayment] = useState<
     "public" | CreditsRecord | undefined
@@ -94,12 +96,14 @@ export function useBuyTickets(launchId: string | Field): BuyTicketMethods {
   const publicMutation = useMutation<void, Error>(
     async () => {
       if (checkPublicEnabled()) {
-        return buyTicket.buy(
+        const txId = await buyTicket.buy(
           context!,
           wallet as ConnectedWalletContextState,
           launch.data!,
           amounts!.publicAmount
         );
+
+        setTransaction(txId, "Buy public");
       }
     },
     {
@@ -126,11 +130,13 @@ export function useBuyTickets(launchId: string | Field): BuyTicketMethods {
   const privateMutation = useMutation<void, Error>(
     async () => {
       if (checkPrivateEnabled()) {
-        return buyTicket.buy(
+        const txId = await buyTicket.buy(
           context!,
           wallet as ConnectedWalletContextState,
           launch.data!
         );
+
+        setTransaction(txId, "Buy private");
       }
     },
     {

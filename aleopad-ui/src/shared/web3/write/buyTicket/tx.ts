@@ -27,7 +27,8 @@ export function buildTransaction(
           normalizeU128(launch.denominator),
           launch.adminAddress,
         ],
-        BUY_TICKET_FEE_AMOUNT
+        BUY_TICKET_FEE_AMOUNT,
+        true
       );
     case "private-with-cap":
       return Transaction.createTransaction(
@@ -44,7 +45,8 @@ export function buildTransaction(
           normalizeU128(launch.denominator),
           launch.adminAddress,
         ],
-        BUY_TICKET_FEE_AMOUNT
+        BUY_TICKET_FEE_AMOUNT,
+        true
       );
     case "public-without-cap":
       return Transaction.createTransaction(
@@ -59,7 +61,8 @@ export function buildTransaction(
           normalizeU128(launch.denominator),
           launch.adminAddress,
         ],
-        BUY_TICKET_FEE_AMOUNT
+        BUY_TICKET_FEE_AMOUNT,
+        false
       );
     case "public-with-cap":
       return Transaction.createTransaction(
@@ -75,7 +78,8 @@ export function buildTransaction(
           normalizeField(launch.id),
           launch.adminAddress,
         ],
-        BUY_TICKET_FEE_AMOUNT
+        BUY_TICKET_FEE_AMOUNT,
+        false
       );
   }
 }

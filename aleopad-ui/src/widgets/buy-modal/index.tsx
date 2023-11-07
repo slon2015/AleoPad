@@ -5,13 +5,13 @@ import { ParsedLaunch } from "shared/web3";
 import { mapPrivacy } from "entities/launch";
 
 interface BuyModalProps {
-  launch: ParsedLaunch;
+  launch?: ParsedLaunch;
   onModalClose(): void;
 }
 
 export function BuyModal({ launch, onModalClose }: BuyModalProps) {
   const isModalOpen = Boolean(launch);
-  const privacy = mapPrivacy(launch.flags);
+  const privacy = launch && mapPrivacy(launch.flags);
 
   return (
     <Modal
@@ -22,7 +22,7 @@ export function BuyModal({ launch, onModalClose }: BuyModalProps) {
     >
       {launch && (
         <Row justify="center">
-          <BuyForm launchId={launch.id} privacy={privacy} />
+          {privacy && <BuyForm launchId={launch.id} privacy={privacy} />}
         </Row>
       )}
     </Modal>
