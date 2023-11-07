@@ -5,6 +5,7 @@ export * from "./useCreditsAmounts";
 export * from "./useBuyTicketsForLaunch";
 export * from "./useSetUpLaunch";
 export * from "./useClaimTicketForLaunch";
+export * from "./useClaimTicketForTicketsList";
 export * from "./useLaunch";
 export * from "./useToken";
 export * from "./useTokensList";

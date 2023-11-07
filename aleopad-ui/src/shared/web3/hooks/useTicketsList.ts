@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 import { useLaunchesList } from "./useLaunchesList";
 import { useWallet } from "./useWallet";
-import { getTicketsList } from "../wallet";
+import { TicketRecord, getTicketsList } from "../wallet";
 import {
   ConnectedWalletContextState,
   OnchainTicketRecord,
@@ -17,9 +17,8 @@ import { useMemo } from "react";
 
 const TICKETS_LIST_QUERY_KEY = ["get", "tickets", "list"];
 
-export type TicketItem = {
+export type TicketItem = TicketRecord & {
   launch: ParsedLaunch;
-  amount: U128;
 };
 
 type TicketsListResponse =
@@ -43,6 +42,8 @@ function mapToItem(
   return {
     launch,
     amount: parsePrimitiveType(ticket.data.amount) as U128,
+    id: ticket.id,
+    onchainRecord: ticket,
   };
 }
 

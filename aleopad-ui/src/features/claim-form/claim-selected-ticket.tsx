@@ -1,18 +1,24 @@
-import { divideToDecimals, fieldToText, useClaimTicket } from "shared/web3";
+import {
+  TicketRecord,
+  fieldToText,
+  useClaimTicketForTicketsList,
+  useToken,
+} from "shared/web3";
 
 import { Button, Form, Row, Skeleton, Space, Typography } from "antd";
-import { TicketRecordsList } from "./ticket-records-list";
 import ClaimMode from "./claim-mode";
+import { Amount } from "shared/ui";
 
 interface ClaimFormProps {
-  launchId: string;
+  ticket: TicketRecord;
   tokenId: string;
 }
 
-export default function BuyForm({ launchId, tokenId }: ClaimFormProps) {
-  const claim = useClaimTicket(launchId, tokenId);
+export function ClaimSelectedTicketForm({ ticket, tokenId }: ClaimFormProps) {
+  const claim = useClaimTicketForTicketsList(tokenId, ticket);
+  const token = useToken(tokenId);
 
-  if (claim.loading || !claim.enabled) {
+  if (claim.loading || !claim.enabled || !token.data) {
     return (
       <>
         <Skeleton />
@@ -31,16 +37,14 @@ export default function BuyForm({ launchId, tokenId }: ClaimFormProps) {
             />
           </Form.Item>
           <Form.Item>
-            <TicketRecordsList
-              records={claim.records}
-              onRecordClick={(r) => claim.selectTicket(r)}
-              selectedRecord={
-                typeof claim.selectedTicket === "object"
-                  ? claim.selectedTicket
-                  : undefined
-              }
-              symbol={fieldToText(claim.token.symbol)}
-            />
+            <Typography.Text>
+              You will receive{" "}
+              <Amount
+                amount={ticket.amount}
+                decimals={token.data!.decimals}
+                symbol={fieldToText(token.data!.symbol)}
+              />
+            </Typography.Text>
           </Form.Item>
           <Form.Item>
             <Row justify="center">
