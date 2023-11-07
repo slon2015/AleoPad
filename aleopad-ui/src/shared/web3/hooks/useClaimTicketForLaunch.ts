@@ -1,5 +1,5 @@
 import { UseMutationResult, useMutation, useQueryClient } from "react-query";
-import { Field, U128, normalizeField, parsePrimitiveType } from "../common";
+import { Field, normalizeField, parsePrimitiveType } from "../common";
 import { TicketRecord } from "../wallet";
 import { useEffect, useMemo, useState } from "react";
 import { launchTicketQueryKey, useLaunchTicket } from "./useLaunchTicket";
@@ -67,7 +67,7 @@ export function useClaimTicket(launchId: string, tokenId: string): Response {
         return claimTicket.createPrivateContext(parsedTokenId, selectedTicket);
       }
     }
-  }, [selectedTicket, launch.data, tickets.data, parsedTokenId]);
+  }, [selectedTicket, launch.data, parsedTokenId, privacy]);
 
   const enabled = useMemo(
     () =>

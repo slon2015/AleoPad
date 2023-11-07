@@ -4,6 +4,7 @@ export type OnchainRecord<T extends object> = {
   microcredits: string;
   spent: boolean;
   recordName: string;
+  owner: string;
   data: T;
 };
 
@@ -13,7 +14,6 @@ export type OnchainCreditRecord = OnchainRecord<{
 }>;
 
 export type OnchainTicketRecord = OnchainRecord<{
-  owner: string;
   launch_id: string;
   amount: string;
 }>;

@@ -16,7 +16,7 @@ export function mapPrivacy(
   return "public";
 }
 
-function mapStage(
+export function mapStage(
   {
     sellBlockDuration,
     sellStartBlock,

@@ -12,3 +12,4 @@ export * from "./useTokenForLaunch";
 export * from "./useLaunchesList";
 export * from "./useLaunchAdministartion";
 export * from "./useGrantCapForLaunch";
+export * from "./useTicketsList";
