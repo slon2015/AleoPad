@@ -1,4 +1,5 @@
 import { Card, Modal, Row, Typography } from "antd";
+import { useCallback } from "react";
 import { Link } from "react-router-dom";
 
 type AwaitTransactionModalProps = Partial<{
@@ -21,6 +22,13 @@ export function AwaitTransactionModal({
   isFinished,
 }: AwaitTransactionModalProps) {
   const isTxSuccesfull = txStatus === "Completed";
+
+  const onCancel = useCallback(() => {
+    if (isFinished && onClose) {
+      onClose();
+    }
+  }, [isFinished, onClose]);
+
   return (
     <Modal
       closable={isFinished}
@@ -28,7 +36,7 @@ export function AwaitTransactionModal({
       open={Boolean(txStatus)}
       footer={null}
       centered
-      onCancel={onClose}
+      onCancel={onCancel}
     >
       <Row>
         {txDescription && <Typography.Text>{txDescription}</Typography.Text>}

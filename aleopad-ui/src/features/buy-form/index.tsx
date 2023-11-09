@@ -16,7 +16,9 @@ interface BuyFormProps {
 }
 
 export default function BuyForm({ privacy, launchId, token }: BuyFormProps) {
-  const [mode, selectMode] = useState<"public" | "private">("public");
+  const [mode, selectMode] = useState<"public" | "private">(
+    privacy === "mixed" ? "public" : privacy
+  );
   const buy = useBuyTickets(launchId, TxResult);
 
   const isBothModesEnabled = privacy === "mixed";
