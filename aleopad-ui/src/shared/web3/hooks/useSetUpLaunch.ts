@@ -3,8 +3,11 @@ import { useCreditsAmounts } from "./useCreditsAmounts";
 import { useWallet } from "./useWallet";
 import { setUpLaunch } from "../write";
 import { ConnectedWalletContextState } from "../types";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { AwaitTxContext } from "widgets/await-tx-modal";
+import { LAUNCH_LIST_QUERY_KEY } from "./useLaunchesList";
+import { TOKENS_LIST_QUERY_KEY } from "./useTokensList";
+import { SetUpContext } from "../write/setup-launch/types";
 
 type SetUpLaunchMethod =
   | {
@@ -16,7 +19,9 @@ type SetUpLaunchMethod =
       enabled: false;
     };
 
-export function useSetUpLaunch(): SetUpLaunchMethod {
+export function useSetUpLaunch(
+  onSuccessComponent: (ctx: SetUpContext) => React.ReactNode
+): SetUpLaunchMethod {
   const wallet = useWallet();
   const { setTransaction } = useContext(AwaitTxContext);
 
@@ -25,6 +30,8 @@ export function useSetUpLaunch(): SetUpLaunchMethod {
 
   const onSuccess = async () => {
     await queryClient.invalidateQueries("creditsAmounts");
+    await queryClient.invalidateQueries(LAUNCH_LIST_QUERY_KEY);
+    await queryClient.invalidateQueries(TOKENS_LIST_QUERY_KEY);
   };
 
   const context = (dto: setUpLaunch.NewLaunch) =>
@@ -43,12 +50,17 @@ export function useSetUpLaunch(): SetUpLaunchMethod {
   const mutation = useMutation<void, Error, setUpLaunch.NewLaunch>(
     async (dto: setUpLaunch.NewLaunch) => {
       if (checkEnabled()) {
+        const ctx = context(dto);
         const txId = await setUpLaunch.setUp(
-          context(dto),
+          ctx,
           wallet as ConnectedWalletContextState,
           amounts!.publicAmount
         );
-        setTransaction(txId, "Launch set up");
+        setTransaction({
+          txId,
+          txTitle: "Launch set up",
+          onSuccess: onSuccessComponent.bind(null, ctx),
+        });
       }
     },
     {

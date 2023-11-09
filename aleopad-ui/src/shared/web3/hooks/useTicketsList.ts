@@ -15,7 +15,7 @@ import {
 } from "../common";
 import { useMemo } from "react";
 
-const TICKETS_LIST_QUERY_KEY = ["get", "tickets", "list"];
+export const TICKETS_LIST_QUERY_KEY = ["get", "tickets", "list"];
 
 export type TicketItem = TicketRecord & {
   launch: ParsedLaunch;

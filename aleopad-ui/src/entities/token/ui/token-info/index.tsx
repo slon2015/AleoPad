@@ -1,28 +1,38 @@
 import { useMemo } from "react";
 import { Descriptions, DescriptionsProps, Typography, Skeleton } from "antd";
 
-import { OnchainToken } from "shared/web3";
+import { OnchainToken, normalizeField } from "shared/web3";
 import { Token, isMappedToken, mapToken } from "entities/token/model";
+import { Link } from "react-router-dom";
 
 type TokenCardProps = {
   token: OnchainToken | Token;
+  link?: boolean;
 };
 
-export default function TokenInfo({ token }: TokenCardProps) {
+export default function TokenInfo({ token, link }: TokenCardProps) {
   const parsedToken = useMemo(
     () => (isMappedToken(token) ? token : mapToken(token)),
     [token]
+  );
+
+  const nameEntry = parsedToken ? (
+    link ? (
+      <Link to={`/tokens/${normalizeField(parsedToken.id)}`}>
+        {parsedToken.name}
+      </Link>
+    ) : (
+      <Typography.Text>{parsedToken!.name}</Typography.Text>
+    )
+  ) : (
+    <Skeleton.Input />
   );
 
   const items: DescriptionsProps["items"] = [
     {
       key: "1",
       label: "Name",
-      children: token ? (
-        <Typography.Text>{parsedToken!.name}</Typography.Text>
-      ) : (
-        <Skeleton.Input />
-      ),
+      children: nameEntry,
     },
     {
       key: "2",

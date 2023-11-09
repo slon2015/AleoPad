@@ -1,7 +1,7 @@
 import { UseMutationResult, useMutation, useQueryClient } from "react-query";
 import { Field, normalizeField, parsePrimitiveType } from "../common";
 import { TicketRecord } from "../wallet";
-import { useContext, useMemo, useState } from "react";
+import { ReactNode, useContext, useMemo, useState } from "react";
 import { launchTicketQueryKey } from "./useLaunchTicket";
 import { claimTicket } from "../write";
 import { useCreditsAmounts } from "./useCreditsAmounts";
@@ -24,6 +24,7 @@ type Response =
 
 export function useClaimTicketForTicketsList(
   tokenId: string,
+  onSuccessComponent: () => ReactNode,
   ticket?: TicketRecord
 ): Response {
   const queryClient = useQueryClient();
@@ -77,7 +78,11 @@ export function useClaimTicketForTicketsList(
           wallet as ConnectedWalletContextState,
           credits.amounts!
         );
-        setTransaction(txId, "Claim ticket");
+        setTransaction({
+          txId,
+          txTitle: "Claim ticket",
+          onSuccess: onSuccessComponent,
+        });
       }
     },
     {

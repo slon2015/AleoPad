@@ -17,6 +17,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { BlockTiming, Ratio } from "shared/ui";
 import { useBlockHeight, useMeanBlockTime, useSetUpLaunch } from "shared/web3";
 import { setUpLaunch } from "shared/web3";
+import { TxResult } from "./tx-result";
 
 function valueToFlags(
   privacy: "mixed" | "public" | "private"
@@ -57,18 +58,18 @@ function flagsToValue(
   }
 }
 
-const defaultLaunch = (currentBlockNumber: number): setUpLaunch.NewLaunch => ({
+const defaultLaunch = (): setUpLaunch.NewLaunch => ({
   token: {
     name: "My new token",
     symbol: "TKN",
-    decimals: 18,
+    decimals: 6,
   },
-  sellBlockStart: currentBlockNumber + 20,
+  sellBlockStart: 20,
   sellDurationInBlocks: 200,
 
-  claimBlockStart: currentBlockNumber + 300,
+  claimBlockStart: 320,
   claimDurationInBlocks: false,
-  ratio: BigNumber(1000000),
+  ratio: BigNumber(1),
   flags: {
     isCapEnabled: false,
     isPublicSellsEnabled: true,
@@ -83,7 +84,7 @@ export default function LaunchEditor() {
   const blockTimeResponse = useMeanBlockTime();
   const [api, contextHolder] = notification.useNotification();
 
-  const setUp = useSetUpLaunch();
+  const setUp = useSetUpLaunch(TxResult);
 
   useEffect(() => {
     if (heightResponse.error || blockTimeResponse.error) {
@@ -104,7 +105,7 @@ export default function LaunchEditor() {
     }
   }, [setUp]);
 
-  const [launch, setLaunch] = useState(defaultLaunch(1000000));
+  const [launch, setLaunch] = useState(defaultLaunch());
 
   const onCurrentBlockClick = useCallback(() => {
     if (heightResponse.blockHeight) {
@@ -365,7 +366,7 @@ export default function LaunchEditor() {
           </Form.Item>
           <Form.Item label="Cap enabled">
             <Checkbox
-              value={launch.flags.isCapEnabled}
+              checked={launch.flags.isCapEnabled}
               onChange={(e) =>
                 setLaunch((l) => {
                   const updated = {

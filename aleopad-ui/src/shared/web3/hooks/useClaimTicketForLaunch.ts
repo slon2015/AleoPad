@@ -113,7 +113,7 @@ export function useClaimTicket(launchId: string, tokenId: string): Response {
           credits.amounts!
         );
 
-        setTransaction(txId, "Ticket claim");
+        setTransaction({ txId, txTitle: "Ticket claim" });
       }
     },
     {

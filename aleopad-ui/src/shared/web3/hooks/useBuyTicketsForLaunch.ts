@@ -7,7 +7,7 @@ import { useLaunch } from "./useLaunch";
 import { capQueryKey, useCapForLaunch } from "./useCapForLaunch";
 import { ConnectedWalletContextState, ParsedLaunch } from "../types";
 import { CreditAmounts, CreditsRecord } from "../wallet";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { ReactNode, useContext, useEffect, useMemo, useState } from "react";
 import { AwaitTxContext } from "widgets/await-tx-modal";
 
 type BuyTicketMethods =
@@ -27,7 +27,10 @@ type BuyTicketMethods =
       loading: true;
     };
 
-export function useBuyTickets(launchId: string | Field): BuyTicketMethods {
+export function useBuyTickets(
+  launchId: string | Field,
+  onSuccessComponent: (launch: ParsedLaunch) => ReactNode
+): BuyTicketMethods {
   const wallet = useWallet();
 
   const launch = useLaunch(launchId);
@@ -103,7 +106,11 @@ export function useBuyTickets(launchId: string | Field): BuyTicketMethods {
           amounts!.publicAmount
         );
 
-        setTransaction(txId, "Buy public");
+        setTransaction({
+          txId,
+          txTitle: "Buy public",
+          onSuccess: onSuccessComponent.bind(null, launch.data!),
+        });
       }
     },
     {
@@ -136,7 +143,11 @@ export function useBuyTickets(launchId: string | Field): BuyTicketMethods {
           launch.data!
         );
 
-        setTransaction(txId, "Buy private");
+        setTransaction({
+          txId,
+          txTitle: "Buy private",
+          onSuccess: onSuccessComponent.bind(null, launch.data!),
+        });
       }
     },
     {

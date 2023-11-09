@@ -59,7 +59,7 @@ export function useGrantCapForLaunch(
           wallet as ConnectedWalletContextState,
           credits.amounts!
         );
-        setTransaction(txId, "Cap grant");
+        setTransaction({ txId, txTitle: "Cap grant" });
       }
     },
     {

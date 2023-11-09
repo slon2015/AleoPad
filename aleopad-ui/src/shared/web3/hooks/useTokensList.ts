@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from "react-query";
 import { getTokens } from "../read";
 import { tokenQueryKey } from "./useToken";
 
-const TOKENS_LIST_QUERY_KEY = ["get", "tokens", "list"];
+export const TOKENS_LIST_QUERY_KEY = ["get", "tokens", "list"];
 
 export function useTokensList() {
   const queryClient = useQueryClient();

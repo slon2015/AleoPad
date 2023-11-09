@@ -8,6 +8,7 @@ import {
 import { Button, Form, Row, Skeleton, Space, Typography } from "antd";
 import ClaimMode from "./claim-mode";
 import { Amount } from "shared/ui";
+import { TxResult } from "./tx-result";
 
 interface ClaimFormProps {
   ticket: TicketRecord;
@@ -15,7 +16,11 @@ interface ClaimFormProps {
 }
 
 export function ClaimSelectedTicketForm({ ticket, tokenId }: ClaimFormProps) {
-  const claim = useClaimTicketForTicketsList(tokenId, ticket);
+  const claim = useClaimTicketForTicketsList(
+    tokenId,
+    TxResult.bind(null, tokenId),
+    ticket
+  );
   const token = useToken(tokenId);
 
   if (claim.loading || !claim.enabled || !token.data) {

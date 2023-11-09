@@ -7,6 +7,7 @@ import { useState } from "react";
 import BuyMode from "./buy-mode";
 import { AmountOut } from "./amount-out";
 import { Token } from "entities/token/model";
+import { TxResult } from "./tx-result";
 
 interface BuyFormProps {
   privacy: "private" | "public" | "mixed";
@@ -16,7 +17,7 @@ interface BuyFormProps {
 
 export default function BuyForm({ privacy, launchId, token }: BuyFormProps) {
   const [mode, selectMode] = useState<"public" | "private">("public");
-  const buy = useBuyTickets(launchId);
+  const buy = useBuyTickets(launchId, TxResult);
 
   const isBothModesEnabled = privacy === "mixed";
 

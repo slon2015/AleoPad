@@ -1,20 +1,23 @@
-import {
-  createContext,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, useCallback, useMemo, useState } from "react";
 import { useAwaitTx } from "shared/web3";
 import { AwaitTransactionModal } from "./modal";
 
 type TxMetadata = {
   txTitle: string;
   txDescription?: string;
+  onSuccess?: () => React.ReactNode;
 };
 
+type TxModalRequest = {
+  txId: string;
+  txTitle: string;
+} & Partial<{
+  txDescription: string;
+  onSuccess: () => React.ReactNode;
+}>;
+
 interface AwaitTxModalContext {
-  setTransaction(txId: string, txTitle: string, txDescription?: string): void;
+  setTransaction(request: TxModalRequest): void;
 }
 
 export const AwaitTxContext = createContext<AwaitTxModalContext>({
@@ -22,27 +25,23 @@ export const AwaitTxContext = createContext<AwaitTxModalContext>({
 });
 
 export function AwaitTxModalProvider({ children }: React.PropsWithChildren) {
-  const { status, setTransactionId, transactionId } = useAwaitTx();
+  const { status, setTransactionId, transactionId, txFinished, cleanUpTx } =
+    useAwaitTx();
   const [metadata, setMetadata] = useState<TxMetadata | undefined>();
 
   const setTransaction: AwaitTxModalContext["setTransaction"] = useCallback(
-    (txId, txTitle, txDescription) => {
+    ({ txId, txTitle, txDescription, onSuccess }) => {
       if (!transactionId) {
         setTransactionId(txId);
         setMetadata({
           txTitle,
           txDescription,
+          onSuccess,
         });
       }
     },
     [transactionId, setTransactionId]
   );
-
-  useEffect(() => {
-    if (!transactionId && metadata) {
-      setMetadata(undefined);
-    }
-  }, [transactionId, metadata, setMetadata]);
 
   const value = useMemo<AwaitTxModalContext>(
     () => ({
@@ -57,6 +56,10 @@ export function AwaitTxModalProvider({ children }: React.PropsWithChildren) {
         txStatus={status}
         txTitle={metadata?.txTitle}
         txDescription={metadata?.txDescription}
+        onSuccess={metadata?.onSuccess}
+        txId={transactionId}
+        isFinished={txFinished}
+        onClose={cleanUpTx}
       />
       {children}
     </AwaitTxContext.Provider>

@@ -17,6 +17,7 @@ export const Routing = () => {
       <Route path="/tokens" element={<TokensListPage />} />
       <Route path="/tokens/:id" element={<TokenPage />} />
       <Route path="/tickets" element={<TicketsListPage />} />
+      <Route path="/tickets/:launchId" element={<TicketsListPage />} />
       <Route path="/manage" element={<ManagePage />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>

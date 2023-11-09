@@ -4,8 +4,10 @@ import { useWallet } from "./useWallet";
 export function useAwaitTx(): Partial<{
   status: string;
   transactionId: string;
+  txFinished: boolean;
 }> & {
   setTransactionId(txId: string): void;
+  cleanUpTx(): void;
 } {
   let [transactionId, setTransactionId] = useState<string | undefined>();
   let [status, setStatus] = useState<string | undefined>();
@@ -38,18 +40,16 @@ export function useAwaitTx(): Partial<{
     };
   }, [transactionId, getTransactionStatus]);
 
-  useEffect(() => {
-    if (status === "Completed" || status === "Failed") {
-      setTimeout(() => {
-        setStatus(undefined);
-        setTransactionId(undefined);
-      }, 3000);
-    }
-  }, [status, setTransactionId]);
+  const cleanUpTx = useCallback(() => {
+    setTransactionId(undefined);
+    setStatus(undefined);
+  }, [setTransactionId]);
 
   return {
     setTransactionId,
+    cleanUpTx,
     status,
+    txFinished: status === "Completed" || status === "Failed",
     transactionId,
   };
 }

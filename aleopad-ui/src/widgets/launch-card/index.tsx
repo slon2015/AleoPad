@@ -23,7 +23,7 @@ export function LaunchCard({ launchId }: LaunchCardProps) {
     if (launchError) {
       api.error({
         message: "Launch loading error",
-        description: launchError,
+        description: launchError ? String(launchError) : "Unknown error",
       });
     }
   }, [launchError]);
@@ -37,7 +37,7 @@ export function LaunchCard({ launchId }: LaunchCardProps) {
         </Row>
         {launch?.token?.id && (
           <Row justify="center">
-            <TokenInfo token={launch.token} />
+            <TokenInfo token={launch.token} link />
           </Row>
         )}
         {administration.data && launch?.token && launch?.cap && (
