@@ -9,6 +9,7 @@ import { useWallet } from "./useWallet";
 import { ConnectedWalletContextState } from "../types";
 import { useToken } from "./useToken";
 import { AwaitTxContext } from "widgets/await-tx-modal";
+import { tokenBalancesQueryKey } from "./useTokenBalances";
 
 type Response =
   | {
@@ -65,6 +66,7 @@ export function useClaimTicketForTicketsList(
     await queryClient.invalidateQueries(
       launchTicketQueryKey(ticket!.onchainRecord.data.launch_id)
     );
+    await queryClient.invalidateQueries(tokenBalancesQueryKey(tokenId));
   };
 
   const mutation = useMutation<void, Error>(

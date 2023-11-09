@@ -13,6 +13,11 @@ export type OnchainCreditRecord = OnchainRecord<{
   microcredits: string;
 }>;
 
+export type OnchainPrivateTokenRecord = OnchainRecord<{
+  token: string;
+  amount: string;
+}>;
+
 export type OnchainTicketRecord = OnchainRecord<{
   launch_id: string;
   amount: string;

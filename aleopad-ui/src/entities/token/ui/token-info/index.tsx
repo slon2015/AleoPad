@@ -1,23 +1,18 @@
-import { useEffect, useMemo } from "react";
-import {
-  Descriptions,
-  DescriptionsProps,
-  notification,
-  Typography,
-  Skeleton,
-} from "antd";
+import { useMemo } from "react";
+import { Descriptions, DescriptionsProps, Typography, Skeleton } from "antd";
 
-import { useToken } from "shared/web3";
-import { mapToken } from "entities/token/model";
+import { OnchainToken } from "shared/web3";
+import { Token, isMappedToken, mapToken } from "entities/token/model";
 
 type TokenCardProps = {
-  tokenId: string;
+  token: OnchainToken | Token;
 };
 
-export default function TokenInfo({ tokenId }: TokenCardProps) {
-  const { data: token, error } = useToken(tokenId);
-  const parsedToken = useMemo(() => mapToken(token), [token]);
-  const [api, contextHolder] = notification.useNotification();
+export default function TokenInfo({ token }: TokenCardProps) {
+  const parsedToken = useMemo(
+    () => (isMappedToken(token) ? token : mapToken(token)),
+    [token]
+  );
 
   const items: DescriptionsProps["items"] = [
     {
@@ -49,19 +44,5 @@ export default function TokenInfo({ tokenId }: TokenCardProps) {
     },
   ];
 
-  useEffect(() => {
-    if (error) {
-      api.error({
-        message: "Token loading error",
-        description: String(error),
-      });
-    }
-  }, [error]);
-
-  return (
-    <>
-      {contextHolder}
-      <Descriptions title="Token" items={items} layout="vertical" />
-    </>
-  );
+  return <Descriptions title="Token" items={items} layout="vertical" />;
 }

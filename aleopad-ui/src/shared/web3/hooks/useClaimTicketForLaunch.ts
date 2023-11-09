@@ -14,6 +14,7 @@ import {
 } from "../types";
 import { useToken } from "./useToken";
 import { AwaitTxContext } from "widgets/await-tx-modal";
+import { tokenBalancesQueryKey } from "./useTokenBalances";
 
 type Response =
   | {
@@ -100,6 +101,7 @@ export function useClaimTicket(launchId: string, tokenId: string): Response {
   const onSuccess = async () => {
     await queryClient.invalidateQueries("creditsAmounts");
     await queryClient.invalidateQueries(launchTicketQueryKey(launchId));
+    await queryClient.invalidateQueries(tokenBalancesQueryKey(tokenId));
   };
 
   const mutation = useMutation(

@@ -16,3 +16,11 @@ export function mapToken(
     decimals: token.decimals,
   };
 }
+
+export function isMappedToken(token: OnchainToken | Token): token is Token {
+  return (
+    typeof token.name === "string" &&
+    typeof token.symbol === "string" &&
+    typeof token.id === "string"
+  );
+}

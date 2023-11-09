@@ -37,7 +37,7 @@ export function LaunchCard({ launchId }: LaunchCardProps) {
         </Row>
         {launch?.token?.id && (
           <Row justify="center">
-            <TokenInfo tokenId={launch.token.id} />
+            <TokenInfo token={launch.token} />
           </Row>
         )}
         {administration.data && launch?.token && launch?.cap && (

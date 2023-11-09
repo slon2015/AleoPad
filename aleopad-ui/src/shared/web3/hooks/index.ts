@@ -15,3 +15,4 @@ export * from "./useLaunchAdministartion";
 export * from "./useGrantCapForLaunch";
 export * from "./useTicketsList";
 export * from "./useAwaitTx";
+export * from "./useTokenBalances";

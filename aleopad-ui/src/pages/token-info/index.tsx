@@ -1,14 +1,9 @@
-import { Card } from "antd";
-import { TokenInfo } from "entities/token";
 import { useParams } from "react-router";
+import { TokenCard } from "widgets/token-card";
 
 const TokenPage = () => {
   const { id } = useParams();
-  return (
-    <Card>
-      <TokenInfo tokenId={id!!} />
-    </Card>
-  );
+  return <TokenCard id={id} />;
 };
 
 export default TokenPage;
