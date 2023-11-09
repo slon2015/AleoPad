@@ -1,5 +1,5 @@
 import { Field, normalizeField, parsePrimitiveType } from "../common";
-import { getPropgramMapping } from "./readMapping";
+import { getPropgramMapping } from "./read-mapping";
 
 export async function getTokenIdForLaunch(id: Field): Promise<Field | null> {
   const tokenId = await getPropgramMapping(

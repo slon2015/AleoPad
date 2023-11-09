@@ -1,6 +1,6 @@
 import { Field, parseLeoStruct, parsePrimitiveType } from "../common";
 import { ParsedLaunch, OnchainLaunch } from "../types";
-import { getAllPropgramMappingValues } from "./readMapping";
+import { getAllPropgramMappingValues } from "./read-mapping";
 
 export async function getLaunches(): Promise<Array<ParsedLaunch>> {
   const launchValues = await getAllPropgramMappingValues(

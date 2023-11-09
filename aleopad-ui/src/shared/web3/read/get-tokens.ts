@@ -1,6 +1,6 @@
 import { Field, parseLeoStruct, parsePrimitiveType } from "../common";
 import { OnchainToken } from "../types";
-import { getAllPropgramMappingValues } from "./readMapping";
+import { getAllPropgramMappingValues } from "./read-mapping";
 
 type MappingToken = {
   name: Field;

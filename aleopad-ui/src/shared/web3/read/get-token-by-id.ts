@@ -5,7 +5,7 @@ import {
   parseLeoStruct,
   parsePrimitiveType,
 } from "../common";
-import { getPropgramMapping } from "./readMapping";
+import { getPropgramMapping } from "./read-mapping";
 
 interface TokenInfo {
   name: Field;

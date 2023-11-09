@@ -1,4 +1,4 @@
-export * as buyTicket from "./buyTicket";
-export * as setUpLaunch from "./setUpLaunch";
+export * as buyTicket from "./buy-ticket";
+export * as setUpLaunch from "./setup-launch";
 export * as claimTicket from "./claim";
-export * as grantCap from "./grantCap";
+export * as grantCap from "./grant-cap";
