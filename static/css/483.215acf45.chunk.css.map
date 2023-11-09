@@ -1,1 +1,0 @@
-{"version":3,"file":"static/css/483.215acf45.chunk.css","mappings":"AAAA,mBACE,WCDF,sBACE","sources":["entities/ticket/ui/ticket-row/styles.module.scss","shared/ui/block-timing/styles.module.scss"],"sourcesContent":[".row {\n  width: 100%;\n}\n",".passed {\n  color: #c7e80e;\n}\n"],"names":[],"sourceRoot":""}

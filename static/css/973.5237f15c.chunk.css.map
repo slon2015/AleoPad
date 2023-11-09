@@ -1,1 +1,0 @@
-{"version":3,"file":"static/css/973.5237f15c.chunk.css","mappings":"AAAA,sBACE,cCDF,kBACE","sources":["shared/ui/block-timing/styles.module.scss","entities/launch/ui/launch-row/style.module.scss"],"sourcesContent":[".passed {\n  color: #c7e80e;\n}\n",".row {\n  width: 100%;\n}\n"],"names":[],"sourceRoot":""}
