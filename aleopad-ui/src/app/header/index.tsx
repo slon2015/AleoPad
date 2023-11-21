@@ -1,6 +1,6 @@
-import { useWallet } from "@demox-labs/aleo-wallet-adapter-react";
 import { Button, Col, Layout, Row, Space } from "antd";
 import { useNavigate } from "react-router";
+import { useWallet } from "shared/web3";
 import ConnectButton from "widgets/connect-button";
 
 const { Header } = Layout;

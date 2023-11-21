@@ -7,6 +7,7 @@ import { withProviders } from "./providers";
 import "./index.scss";
 import AppHeader from "./header";
 import { AppContent } from "./content";
+import AppFooter from "./footer";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <AppContent>
         <Routing />
       </AppContent>
+      <AppFooter />
     </Layout>
   );
 }
